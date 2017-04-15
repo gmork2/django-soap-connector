@@ -79,5 +79,8 @@ class ModelFactory(ModelBase):
         
         # Register new class
         cls.registry[name] = new_class
+        
+        return new_class
+
 
 
