@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Print a WSDL Document'
 
     def add_arguments(self, parser):
-        pass
+        parser.add_argument('wsdl', type=str)
 
     def handle(self, *args, **options):
         wsdl = options['wsdl']
