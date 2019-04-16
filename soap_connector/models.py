@@ -1,5 +1,6 @@
 import keyword
 import re
+import weakref
 
 from django.db import models
 from django.db.models.base import ModelBase
@@ -21,14 +22,13 @@ class ModelFactory(ModelBase):
 
     def __call__(self, *args):
         if args in self.__cache:
-            logger.info(self.__cache[args])
             return self.__cache[args]
         else:
             obj = super().__call__(*args)
             self.__cache[args] = obj
         return obj
 
-        def __new__(cls, name, bases, ns, *, debug=False, synchronize=False):
+    def __new__(cls, name, bases, ns, *, debug=False, synchronize=False):
         """
         The constructor must register and cache all generated classes by
         itself. This behaviour prevents inconsistencies when class is
