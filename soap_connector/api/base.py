@@ -1,5 +1,6 @@
 from typing import Type, Dict, Union, ClassVar
 
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -63,3 +64,50 @@ class SerializerMixin(object):
             'request': self.request,
             'view': self
         }
+
+
+class BaseAPIView(SerializerMixin, APIView):
+    """
+
+    """
+    object_class: ClassVar[type] = None
+
+    def list(self, request: Request, **kwargs) -> Response:
+        """
+
+        :param request:
+        :return:
+        """
+        pass
+
+    def get(self, request: Request, **kwargs) -> Response:
+        """
+
+        :param request:
+        :return:
+        """
+        pass
+
+    def post(self, request: Request, **kwargs) -> Response:
+        """
+
+        :param request:
+        :return:
+        """
+        pass
+
+    def delete(self, request: Request, **kwargs) -> Response:
+        """
+
+        :param request:
+        :return:
+        """
+        pass
+
+    def put(self, request: Request, **kwargs) -> Response:
+        """
+
+        :param request:
+        :return:
+        """
+        pass
