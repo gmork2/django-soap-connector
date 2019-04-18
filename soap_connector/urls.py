@@ -1,4 +1,8 @@
-from rest_framework.routers import DefaultRouter
+from django.urls import path
+
+from soap_connector import api
 
 
-router = DefaultRouter()
+urlpatterns = [
+    path('', api.root),
+]
