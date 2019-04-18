@@ -7,7 +7,6 @@ from rest_framework.request import Request
 from rest_framework.reverse import reverse
 from rest_framework.serializers import Serializer
 
-Context = Dict[str, Union["BaseAPIView", Request]]
 URL_NAMES = []
 
 
