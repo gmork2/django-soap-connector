@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, List, Any, Union, Optional
+from typing import Dict, List, Union, Optional
 
 from django.core.cache import cache
 
@@ -102,29 +102,57 @@ class Cache(object):
         :param context:
         """
         self.key: Optional[str] = None
-        self.context = context
+        self.registry: Optional[Registry] = None
 
-    def __getitem__(self, item):
+        self.set_context(context)
+
+    def __getitem__(self, version: int) -> dict:
         """
 
-        :param item:
+        :param version:
         :return:
         """
-        return cache[item]
+        data: dict = cache.get(self.key, version=version)
+        return data
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, version: int, data: dict) -> None:
         """
 
-        :param key:
-        :param value:
+        :param version:
+        :param data:
         :return:
         """
-        cache[key] = value
+        cache.set(self.key, data, version=version)
+        self.registry.insert(version)
 
-    def __delitem__(self, key):
+    def __delitem__(self, version) -> None:
         """
 
-        :param key:
+
+        :param version:
         :return:
         """
-        del cache[key]
+        if self[version]:
+            cache.delete(self.key, version=version)
+            self.registry.remove(version)
+
+    def set_context(self, context: Context) -> None:
+        """
+
+        :param context:
+        :return:
+        """
+        cls: type = context['view'].object_class
+
+        self.key: str = make_key(context, cls.__name__)
+        self.registry = Registry(context)
+
+    def values(self) -> ObjectList:
+        """
+
+        :return:
+        """
+        return [
+            cache.get(self.key, version=version)
+            for version in self.registry.retrieve()
+        ]
