@@ -1,4 +1,4 @@
-from typing import Type, Dict, Union, ClassVar
+from typing import Type, ClassVar
 
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.reverse import reverse
 from rest_framework.serializers import Serializer
+
+from soap_connector.cache import Cache, Context
 
 URL_NAMES = []
 
@@ -70,6 +72,17 @@ class BaseAPIView(SerializerMixin, APIView):
 
     """
     object_class: ClassVar[type] = None
+
+    @property
+    def cache(self) -> Cache:
+        """
+
+        :return:
+        """
+        context: Context = self.get_serializer_context()
+        cache = Cache(context)
+
+        return cache
 
     def list(self, request: Request, **kwargs) -> Response:
         """
