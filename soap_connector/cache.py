@@ -48,7 +48,6 @@ class Registry(object):
 
         :return:
         """
-
         registry: dict = cache.get(self.key)
 
         if registry:
@@ -135,6 +134,15 @@ class Cache(object):
         if self[version]:
             cache.delete(self.key, version=version)
             self.registry.remove(version)
+
+    def __contains__(self, version: int):
+        """
+
+        :param item:
+        :return:
+        """
+        versions = self.registry.retrieve()
+        return version in versions
 
     def set_context(self, context: Context) -> None:
         """
