@@ -57,4 +57,7 @@ class BaseSerializer(serializers.Serializer):
         :param validated_data:
         :return:
         """
+        view = self.context['view']
+        validated_data['pk'] = view.kwargs['pk']
+
         return self.save(validated_data)
