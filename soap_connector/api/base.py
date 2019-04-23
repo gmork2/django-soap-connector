@@ -119,7 +119,18 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        pass
+        if 'pk' in kwargs:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        context: Context = self.get_serializer_context()
+        serializer: Serializer = self.serializer_class(
+            data=request.data, context=context
+        )
+        if serializer.is_valid():
+            data: dict = serializer.create(serializer.data)
+            return Response(data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
 
     def delete(self, request: Request, **kwargs) -> Response:
         """
