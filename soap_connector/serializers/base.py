@@ -1,8 +1,9 @@
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from soap_connector.cache import Cache
 
-ERROR = "Resource <{}> already exists."
+ERROR = _("Resource <{}> already exists.")
 
 
 class BaseSerializer(serializers.Serializer):
