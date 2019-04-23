@@ -138,7 +138,18 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        pass
+        pk: int = kwargs.get('pk', None)
+
+        if pk is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            context: Context = self.get_serializer_context()
+            cache = Cache(context)
+            if cache[pk]:
+                del cache[pk]
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request: Request, **kwargs) -> Response:
         """
