@@ -1,4 +1,4 @@
-from typing import Type, ClassVar
+from typing import Type, List, ClassVar
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -91,7 +91,11 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        pass
+        object_list: List[dict] = self.cache.values()
+        if object_list:
+            return Response(object_list, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request: Request, **kwargs) -> Response:
         """
