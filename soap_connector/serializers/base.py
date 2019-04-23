@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+ERROR = "Resource <{}> already exists."
+
 
 class BaseSerializer(serializers.Serializer):
     """
@@ -13,6 +15,16 @@ class BaseSerializer(serializers.Serializer):
         :param data:
         :return:
         """
+        request = self.context['request']
+        view = self.context['view']
+
+        if request.method.upper() == 'POST':
+
+            pk = data.get('pk')
+            if pk in view.cache():
+                msg = _(ERROR.format(pk))
+                raise serializers.ValidationError(msg)
+
         return data
 
     def save(self, validated_data: dict) -> dict:
