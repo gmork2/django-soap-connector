@@ -24,7 +24,7 @@ class BaseSerializer(serializers.Serializer):
         if request.method.upper() == 'POST':
 
             pk = data.get('pk')
-            if pk in view.cache():
+            if pk in view.cache:
                 msg = _(ERROR.format(pk))
                 raise serializers.ValidationError(msg)
 
