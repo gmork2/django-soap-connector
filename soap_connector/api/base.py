@@ -1,5 +1,6 @@
 from typing import Type, ClassVar
 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -98,7 +99,15 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        pass
+        pk: int = kwargs.get('pk', None)
+        if pk is None:
+            return self.list(request)
+        else:
+            data: dict = self.cache[pk]
+            if data is not None:
+                return Response(data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request: Request, **kwargs) -> Response:
         """
