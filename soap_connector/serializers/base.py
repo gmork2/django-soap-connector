@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from soap_connector.cache import Cache
+
 ERROR = "Resource <{}> already exists."
 
 
@@ -33,6 +35,11 @@ class BaseSerializer(serializers.Serializer):
         :param validated_data:
         :return:
         """
+        pk = validated_data.get('pk')
+
+        cache = Cache(self.context)
+        cache[pk] = validated_data
+
         return validated_data
 
     def create(self, validated_data: dict) -> dict:
