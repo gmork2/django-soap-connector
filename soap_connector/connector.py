@@ -2,6 +2,7 @@ import logging
 import math
 
 from zeep.client import Client
+from zeep.wsdl.definitions import Service, Port
 
 logger = logging.getLogger(__name__)
 
@@ -36,3 +37,57 @@ class Connector(object):
         :param kwargs:
         """
         self.client = Client(**client)
+
+    @property
+    def prefixes(self):
+        """
+
+        :return:
+        """
+        return
+
+    @property
+    def global_elements(self):
+        """
+
+        :return:
+        """
+        return
+
+    @property
+    def global_types(self):
+        """
+
+        :return:
+        """
+        return
+
+    @property
+    def bindings(self):
+        """
+
+        :return:
+        """
+        return
+
+    @property
+    def services(self):
+        """
+
+        :return:
+        """
+        return
+
+    def ports(self, service: Service):
+        """
+
+        :return:
+        """
+        return
+
+    def operations(self, service: Service, port: Port):
+        """
+
+        :return:
+        """
+        return
