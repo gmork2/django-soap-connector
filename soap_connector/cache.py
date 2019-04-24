@@ -90,6 +90,13 @@ class Registry(object):
         }
         cache.set(self.key, data)
 
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return f'{self.key} -> {cache.get(self.key, None)}'
+
 
 class Cache(object):
     """
