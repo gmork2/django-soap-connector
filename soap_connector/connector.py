@@ -1,4 +1,5 @@
 import logging
+import math
 
 from zeep.client import Client
 
@@ -13,6 +14,16 @@ def to_number(s: str) -> int:
     :return:
     """
     return int.from_bytes(s.encode(), 'little')
+
+
+def from_number(n: int) -> str:
+    """
+    Transform 'n' parameter into string and returns it.
+
+    :param n:
+    :return:
+    """
+    return n.to_bytes(math.ceil(n.bit_length() / 8), 'little').decode()
 
 
 class Connector(object):
