@@ -157,4 +157,16 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        pass
+        if 'pk' not in kwargs or \
+                kwargs['pk'] not in self.cache:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            context: Context = self.get_serializer_context()
+            serializer = self.serializer_class(
+                data=request.data, context=context
+            )
+            if serializer.is_valid():
+                data = serializer.update(None, serializer.data)
+                return Response(data, status=status.HTTP_200_OK)
+
+            return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
