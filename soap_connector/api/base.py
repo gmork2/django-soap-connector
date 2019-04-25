@@ -98,7 +98,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return cache
 
-    def list(self, request: Request, **kwargs) -> Response:
+    def list(self, request: Request, *args, **kwargs) -> Response:
         """
 
         :param request:
@@ -110,7 +110,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def get(self, request: Request, **kwargs) -> Response:
+    def get(self, request: Request, *args, **kwargs) -> Response:
         """
 
         :param request:
@@ -126,7 +126,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request: Request, **kwargs) -> Response:
+    def post(self, request: Request, *args, **kwargs) -> Response:
         """
 
         :param request:
@@ -145,7 +145,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
 
-    def delete(self, request: Request, **kwargs) -> Response:
+    def delete(self, request: Request, *args, **kwargs) -> Response:
         """
 
         :param request:
@@ -164,7 +164,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def put(self, request: Request, **kwargs) -> Response:
+    def put(self, request: Request, *args, **kwargs) -> Response:
         """
 
         :param request:
