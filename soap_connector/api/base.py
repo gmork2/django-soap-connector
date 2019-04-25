@@ -74,6 +74,19 @@ class BaseAPIView(SerializerMixin, APIView):
     """
     object_class: ClassVar[type] = None
 
+    def set_context(self, object_class: type,
+                    serializer_class: Type[Serializer] = None):
+        """
+
+        :param object_class:
+        :param serializer_class:
+        :return:
+        """
+        self.object_class = object_class
+
+        if serializer_class is not None:
+            self.serializer_class = serializer_class
+
     @property
     def cache(self) -> Cache:
         """
