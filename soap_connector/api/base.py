@@ -155,12 +155,9 @@ class BaseAPIView(SerializerMixin, APIView):
 
         if pk is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            context: Context = self.get_serializer_context()
-            cache = Cache(context)
-            if cache[pk]:
-                del cache[pk]
-                return Response(status=status.HTTP_204_NO_CONTENT)
+        elif self.cache[pk]:
+            del self.cache[pk]
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
