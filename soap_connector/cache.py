@@ -145,7 +145,7 @@ class Cache(object):
     def __contains__(self, version: int):
         """
 
-        :param item:
+        :param version:
         :return:
         """
         versions = self.registry.retrieve()
