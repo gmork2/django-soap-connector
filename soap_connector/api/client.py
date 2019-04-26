@@ -44,7 +44,18 @@ class ConnectorView(ClientView):
         :param kwargs:
         :return:
         """
-        pass
+        object_class = self.object_class
+
+        self.set_context(Client)
+        connector = Connector.from_view(self)
+        data = getattr(connector, self.source_name)
+
+        if data:
+            self.set_context(object_class)
+            self.save(data)
+            return Response(data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request: Request, **kwargs) -> Response:
         """
@@ -71,7 +82,8 @@ class ConnectorView(ClientView):
         :param object_list:
         :return:
         """
-        pass
+        for obj in object_list:
+            self.cache[obj['pk']] = obj
 
 
 client = ClientView.as_view()
