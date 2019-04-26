@@ -38,8 +38,8 @@ class BaseSerializer(serializers.Serializer):
         """
         pk = validated_data.get('pk')
 
-        cache = Cache(self.context)
-        cache[pk] = validated_data
+        view = self.context['view']
+        view.cache[pk] = validated_data
 
         return validated_data
 
