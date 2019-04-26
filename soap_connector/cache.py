@@ -109,6 +109,7 @@ class Cache(object):
         """
         self.key: Optional[str] = None
         self.registry: Optional[Registry] = None
+        self.timeout = None
 
         self.set_context(context)
 
@@ -128,7 +129,7 @@ class Cache(object):
         :param data:
         :return:
         """
-        cache.set(self.key, data, version=version)
+        cache.set(self.key, data, timeout=self.timeout, version=version)
         self.registry.insert(version)
 
     def __delitem__(self, version) -> None:
