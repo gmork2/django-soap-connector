@@ -138,7 +138,24 @@ class Connector(object):
 
         :return:
         """
-        return
+        object_list = []
+        for binding_obj in sorted(
+                self.client.wsdl.bindings.values(),
+                key=lambda k: str(k)):
+            pk = id(binding_obj.name)
+            url = reverse(
+                f'soap_connector:client_binding_detail',
+                kwargs={'pk': self.client_pk, 'binding_pk': pk},
+                request=self.context['request'])
+            object_list.append({
+                'pk': pk,
+                'class': binding_obj.__class__.__name__,
+                'name': str(binding_obj.name),
+                'port_name': str(binding_obj.port_name),
+                'url': url
+            })
+
+        return object_list
 
     @property
     def services(self):
