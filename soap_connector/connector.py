@@ -4,6 +4,9 @@ import math
 from zeep.client import Client
 from zeep.wsdl.definitions import Service, Port
 
+from soap_connector.serializers import ClientSerializer
+from soap_connector.api.base import BaseAPIView
+
 logger = logging.getLogger(__name__)
 
 
@@ -31,12 +34,37 @@ class Connector(object):
     """
 
     """
+
     def __init__(self, client: dict, **kwargs):
         """
 
         :param kwargs:
         """
-        self.client = Client(**client)
+        fields = {
+            key: value for key, value in client.items()
+            if key in ClientSerializer.Meta.fields
+        }
+        self.client = Client(**fields)
+        self.client_pk = client['pk']
+        self.context = kwargs['context']
+
+    @classmethod
+    def from_view(cls, view: BaseAPIView) -> "Connector":
+        """
+
+        :param view:
+        :return:
+        """
+        assert issubclass(view.object_class, Client), (
+                "'%s' needs that view context be a Client object "
+                "class in order to retrieve serialized client data "
+                "from cache."
+                % cls.__name__)
+        context = view.get_serializer_context()
+        pk = view.kwargs['pk']
+        client = view.cache[pk]
+
+        return cls(client, context=context)
 
     @property
     def prefixes(self):
