@@ -96,7 +96,20 @@ class Connector(object):
 
         :return:
         """
-        return
+        elements = self.client.wsdl.types.elements
+        object_list = []
+
+        for obj in sorted(elements, key=lambda k: k.qname):
+            element = obj.signature(schema=self.client.wsdl.types)
+            if element:
+                pk = id(element)
+                url = reverse(
+                    f'soap_connector:client_global_type_detail',
+                    kwargs={'pk': self.client_pk, 'type_pk': pk},
+                    request=self.context['request'])
+                object_list.append({'pk': pk, 'global_element': element, 'url': url})
+
+        return object_list
 
     @property
     def global_types(self):
