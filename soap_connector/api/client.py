@@ -6,6 +6,9 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 
 from zeep.client import Client
+from zeep.wsdl.definitions import Binding
+from zeep.xsd.types import Type
+from zeep.xsd.elements import Element
 
 from soap_connector.serializers import ClientSerializer
 from soap_connector.api.base import BaseAPIView
@@ -86,4 +89,33 @@ class ConnectorView(ClientView):
             self.cache[obj['pk']] = obj
 
 
+class GlobalTypeView(ConnectorView):
+    object_class = Type
+    source_name: ClassVar[str] = 'global_types'
+    object_pk_name: ClassVar[str] = 'type_pk'
+
+
+class GlobalElementView(ConnectorView):
+    object_class = Element
+    source_name: ClassVar[str] = 'global_elements'
+    object_pk_name: ClassVar[str] = 'element_pk'
+
+
+class PrefixView(ConnectorView):
+    object_class = type('Prefix', (), {})
+    source_name: ClassVar[str] = 'prefixes'
+    object_pk_name: ClassVar[str] = 'prefix_pk'
+
+
+class BindingView(ConnectorView):
+    object_class = Binding
+    source_name: ClassVar[str] = 'bindings'
+    object_pk_name: ClassVar[str] = 'binding_pk'
+
+
 client = ClientView.as_view()
+global_type = GlobalTypeView.as_view()
+global_element = GlobalElementView.as_view()
+prefix = PrefixView.as_view()
+binding = BindingView.as_view()
+
