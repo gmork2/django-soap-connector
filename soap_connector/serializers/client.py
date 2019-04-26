@@ -16,6 +16,7 @@ class ClientSerializer(BaseSerializer):
     # settings = SettingsSerializer(required=False)
     settings = serializers.IntegerField(min_value=1, required=False)
     url = HyperlinkedField(view_name='soap_connector:client_detail')
+    types = HyperlinkedField(view_name='soap_connector:client_global_type_list')
     elements = HyperlinkedField(view_name='soap_connector:client_global_element_list')
     prefixes = HyperlinkedField(view_name='soap_connector:client_prefix_list')
 
