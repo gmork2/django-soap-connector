@@ -10,7 +10,9 @@ from rest_framework.serializers import Serializer
 
 from soap_connector.cache import Cache, Context
 
-URL_NAMES = ['settings']
+URL_NAMES = [
+    'settings', 'signature', 'username_token'
+]
 
 
 @api_view()
