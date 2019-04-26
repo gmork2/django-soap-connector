@@ -53,7 +53,17 @@ class ConnectorView(ClientView):
         :param kwargs:
         :return:
         """
-        pass
+
+        object_pk: int = kwargs.get(self.object_pk_name, None)
+
+        if object_pk is None:
+            return self.list(request, **kwargs)
+        else:
+            data: dict = self.cache[object_pk]
+            if data is not None:
+                return Response(data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def save(self, object_list):
         """
