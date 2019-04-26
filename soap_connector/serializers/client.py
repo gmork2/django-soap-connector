@@ -16,6 +16,7 @@ class ClientSerializer(BaseSerializer):
     # settings = SettingsSerializer(required=False)
     settings = serializers.IntegerField(min_value=1, required=False)
     url = HyperlinkedField(view_name='soap_connector:client_detail')
+    prefixes = HyperlinkedField(view_name='soap_connector:client_prefix_list')
 
     class Meta:
         fields = ['wsdl', 'service_name', 'port_name', 'settings']

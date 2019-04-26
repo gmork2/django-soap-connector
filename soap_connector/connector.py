@@ -4,6 +4,8 @@ import math
 from zeep.client import Client
 from zeep.wsdl.definitions import Service, Port
 
+from rest_framework.reverse import reverse
+
 from soap_connector.serializers import ClientSerializer
 from soap_connector.api.base import BaseAPIView
 
@@ -72,7 +74,21 @@ class Connector(object):
 
         :return:
         """
-        return
+        object_list = []
+
+        for data in self.client.wsdl.types.prefix_map.items():
+            pk = id(data[0])
+            url = reverse(
+                f'soap_connector:client_prefix_detail',
+                kwargs={'pk': self.client_pk, 'prefix_pk': pk},
+                request=self.context['request'])
+            object_list.append({
+                'pk': pk,
+                'prefix': data[0],
+                'namespace': data[1],
+                'url': url})
+
+        return object_list
 
     @property
     def global_elements(self):
