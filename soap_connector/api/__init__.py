@@ -7,5 +7,5 @@ from .wsse import signature, username_token
 
 __all__ = [
     'root', 'settings', 'client', 'global_type', 'global_element', 'prefix',
-    'binding', 'signature', 'username_token', 'service'
+    'binding', 'signature', 'username_token', 'service', 'port', 'operation'
 ]
