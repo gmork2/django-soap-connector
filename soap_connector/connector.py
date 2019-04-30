@@ -1,4 +1,5 @@
 import logging
+import operator
 import math
 
 from zeep.client import Client
@@ -205,4 +206,22 @@ class Connector(object):
 
         :return:
         """
-        return
+        object_list = []
+        operations = sorted(
+            port.binding._operations.values(),
+            key=operator.attrgetter('name')
+        )
+        for operation in operations:
+            pk = operation.name
+            url = reverse(
+                f'soap_connector:client_operation_detail',
+                kwargs={
+                    'pk': self.client_pk,
+                    'service_pk': service.name,
+                    'port_pk': port.name,
+                    'operation_pk': pk
+                },
+                request=self.context['request'])
+            object_list.append({'pk': pk, 'operation': operation.name, 'url': url})
+
+        return object_list
