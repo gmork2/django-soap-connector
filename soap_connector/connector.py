@@ -163,7 +163,21 @@ class Connector(object):
 
         :return:
         """
-        return
+        object_list = []
+        for service in self.client.wsdl.services.values():
+            pk = service.name
+            url = reverse(
+                f'soap_connector:client_service_detail',
+                kwargs={'pk': self.client_pk, 'service_pk': pk},
+                request=self.context['request'])
+            object_list.append({
+                'pk': pk,
+                'service': service.name,
+                'ports': self.ports(service),
+                'url': url
+            })
+
+        return object_list
 
     def ports(self, service: Service):
         """
