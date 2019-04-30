@@ -1,6 +1,7 @@
 import logging
 import operator
 import math
+from typing import List, Optional
 
 from zeep.client import Client
 from zeep.wsdl.definitions import Service, Port
@@ -31,6 +32,20 @@ def from_number(n: int) -> str:
     :return:
     """
     return n.to_bytes(math.ceil(n.bit_length() / 8), 'little').decode()
+
+
+def parser(parts: Optional[List[str]] = ()):
+    """
+    Returns a parser signature.
+
+    :param parts:
+    :return:
+    """
+    for part in parts:
+        params = part.split(', ')
+        for param in params:
+            qname, _type = param.split(': ')
+            yield qname, _type
 
 
 class Connector(object):
