@@ -3,10 +3,11 @@ import operator
 import math
 from typing import List, Optional
 
+from rest_framework.reverse import reverse
+
 from zeep.client import Client
 from zeep.wsdl.definitions import Service, Port
-
-from rest_framework.reverse import reverse
+from zeep.wsdl.messages.soap import SoapMessage
 
 from soap_connector.serializers import ClientSerializer
 from soap_connector.api.base import BaseAPIView
@@ -46,6 +47,18 @@ def parser(parts: Optional[List[str]] = ()):
         for param in params:
             qname, _type = param.split(': ')
             yield qname, _type
+
+
+def signature(soap_message: SoapMessage):
+    if not soap_message.envelope:
+        return None
+
+    if soap_message.body:
+        parts = [soap_message.body.type.signature(schema=soap_message.wsdl.types, standalone=False)]
+    else:
+        parts = []
+
+    return parts
 
 
 class Connector(object):
