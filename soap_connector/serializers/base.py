@@ -1,15 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from soap_connector.cache import Cache
-
 ERROR = _("Resource <{}> already exists.")
 
 
 class BaseSerializer(serializers.Serializer):
     """
 
-        """
+    """
     pk = serializers.IntegerField(default=1, min_value=1)
 
     def validate(self, data: dict) -> dict:
