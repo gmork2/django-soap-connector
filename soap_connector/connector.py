@@ -184,7 +184,21 @@ class Connector(object):
 
         :return:
         """
-        return
+        object_list = []
+        for port in service.ports.values():
+            pk = port.name
+            url = reverse(
+                f'soap_connector:client_port_detail',
+                kwargs={'pk': self.client_pk, 'service_pk': service.name, 'port_pk': pk},
+                request=self.context['request'])
+            object_list.append({
+                'pk': pk,
+                'port': port.name,
+                'operations': self.operations(service, port),
+                'url': url
+            })
+
+        return object_list
 
     def operations(self, service: Service, port: Port):
         """
