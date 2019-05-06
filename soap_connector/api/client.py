@@ -51,12 +51,13 @@ class ConnectorView(ClientView):
 
         self.set_context(Client)
         connector = Connector.from_view(self)
-        data = getattr(connector, self.source_name)
+        if connector is not None:
+            data = getattr(connector, self.source_name)
 
-        if data:
-            self.set_context(object_class)
-            self.save(data)
-            return Response(data, status=status.HTTP_200_OK)
+            if data:
+                self.set_context(object_class)
+                self.save(data)
+                return Response(data, status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -118,4 +119,3 @@ global_type = GlobalTypeView.as_view()
 global_element = GlobalElementView.as_view()
 prefix = PrefixView.as_view()
 binding = BindingView.as_view()
-

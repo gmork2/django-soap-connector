@@ -94,8 +94,8 @@ class Connector(object):
         context = view.get_serializer_context()
         pk = view.kwargs['pk']
         client = view.cache[pk]
-
-        return cls(client, context=context)
+        if client:
+            return cls(client, context=context)
 
     @property
     def prefixes(self):
