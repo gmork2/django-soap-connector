@@ -1,4 +1,5 @@
 from typing import Type, List, ClassVar
+from contextlib import contextmanager
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -94,6 +95,25 @@ class BaseAPIView(SerializerMixin, APIView):
 
         if serializer_class is not None:
             self.serializer_class = serializer_class
+
+    @contextmanager
+    def context(self, object_class: type,
+                serializer_class: Type[Serializer] = None) -> None:
+        """
+        Context manager that allows the executing of code in a
+        different context.
+
+        :param object_class:
+        :param serializer_class:
+        :return:
+        """
+        ctx = (
+            self.object_class,
+            self.serializer_class
+        )
+        self.set_context(object_class, serializer_class)
+        yield self
+        self.set_context(*ctx)
 
     @property
     def cache(self) -> Cache:
