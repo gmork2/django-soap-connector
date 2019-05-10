@@ -18,6 +18,8 @@ URL_NAMES = [
 @api_view()
 def root(request):
     """
+    The API entry point that provide a list of top-level
+    collections.
 
     :param request:
     :return:
@@ -30,7 +32,9 @@ def root(request):
 
 class SerializerMixin(object):
     """
-
+    Mixin that provides a serializer class that should be used
+    for validating and deserializing input, and for serializing
+    output.
     """
     serializer_class: ClassVar[Type[Serializer]] = None
 
@@ -72,13 +76,15 @@ class SerializerMixin(object):
 
 class BaseAPIView(SerializerMixin, APIView):
     """
-
+    This class extends REST framework's APIView class, adding
+    commonly required behavior for standard list and detail views.
     """
     object_class: ClassVar[type] = None
 
     def set_context(self, object_class: type,
                     serializer_class: Type[Serializer] = None):
         """
+        Set a new context.
 
         :param object_class:
         :param serializer_class:
@@ -92,6 +98,7 @@ class BaseAPIView(SerializerMixin, APIView):
     @property
     def cache(self) -> Cache:
         """
+        Property that returns a contextualized cache object.
 
         :return:
         """
@@ -102,6 +109,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         """
+        Concrete view for listing a collection of objects.
 
         :param request:
         :return:
@@ -114,6 +122,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
     def get(self, request: Request, *args, **kwargs) -> Response:
         """
+        Concrete view for retrieve an object.
 
         :param request:
         :return:
@@ -130,6 +139,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
     def post(self, request: Request, *args, **kwargs) -> Response:
         """
+        Concrete view for creating an object.
 
         :param request:
         :return:
@@ -149,6 +159,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
     def delete(self, request: Request, *args, **kwargs) -> Response:
         """
+        Concrete view for deleting an object.
 
         :param request:
         :return:
@@ -165,6 +176,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
     def put(self, request: Request, *args, **kwargs) -> Response:
         """
+        Concrete view for updating an object.
 
         :param request:
         :return:
