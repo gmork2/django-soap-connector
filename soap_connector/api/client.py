@@ -47,17 +47,16 @@ class ConnectorView(ClientView):
         :param kwargs:
         :return:
         """
-        object_class = self.object_class
+        data = None
 
-        self.set_context(Client)
-        connector = Connector.from_view(self)
-        if connector is not None:
-            data = getattr(connector, self.source_name)
+        with self.context(Client):
+            connector = Connector.from_view(self)
+            if connector is not None:
+                data = getattr(connector, self.source_name)
 
-            if data:
-                self.set_context(object_class)
-                self.save(data)
-                return Response(data, status=status.HTTP_200_OK)
+        if data:
+            self.save(data)
+            return Response(data, status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
