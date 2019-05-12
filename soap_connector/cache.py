@@ -26,6 +26,50 @@ def make_key(context, sufix: str) -> str:
     ])
 
 
+class CacheIterator(object):
+    """
+    This class traverses and caches the elements in iterable
+    object according context provided by view.
+    """
+    def __init__(self, object_list: ObjectList, cls: type,
+                 view: "BaseAPIView"):
+        """
+
+        :param object_list:
+        :param cls:
+        """
+        self.index = 0
+
+        self.object_list = object_list
+        self.cls = cls
+        self.view = view
+
+    def __iter__(self) -> "CacheIterator":
+        """
+        Returns the iterator object.
+
+        :return:
+        """
+        return self
+
+    def __next__(self) -> dict:
+        """
+        Caches and returns the object of the current iteration.
+
+        :return:
+        """
+        try:
+            obj = self.object_list[self.index]
+        except IndexError:
+            raise StopIteration
+
+        self.index += 1
+
+        with self.view.context(self.cls):
+            self.view.cache[obj['pk']] = obj
+            return obj
+
+
 class Registry(object):
     """
 
