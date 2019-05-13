@@ -74,7 +74,7 @@ class Registry(object):
     """
 
     """
-    def __init__(self, context):
+    def __init__(self, context: Context):
         """
 
         :return:
