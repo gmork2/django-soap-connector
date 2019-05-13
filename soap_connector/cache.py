@@ -216,3 +216,4 @@ class Cache(object):
             cache.get(self.key, version=version)
             for version in self.registry.retrieve()
         ]
+

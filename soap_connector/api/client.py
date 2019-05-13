@@ -13,6 +13,7 @@ from zeep.xsd.elements import Element
 from soap_connector.serializers import ClientSerializer
 from soap_connector.api.base import BaseAPIView
 from soap_connector.connector import Connector
+from soap_connector.cache import CacheIterator
 
 logger = logging.getLogger(__name__)
 
@@ -79,14 +80,35 @@ class ConnectorView(ClientView):
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    def save_all(self, object_list, cls, lookup=None):
+        """
+        Iterates on object_list and its recursively nested lists.
+
+        :param object_list: Current object list
+        :param cls: Class to which the context belongs
+        :param lookup: Indicates the sublists on which to nest
+        :return:
+        """
+        iterator = CacheIterator(object_list, cls, self)
+
+        while True:
+            try:
+                item = next(iterator)
+                if lookup:
+                    key, cls = lookup.pop(0)
+                    self.save_all(item[key], cls, lookup)
+
+            except StopIteration:
+                break
+
     def save(self, object_list):
         """
+        Saves an object list.
 
         :param object_list:
         :return:
         """
-        for obj in object_list:
-            self.cache[obj['pk']] = obj
+        self.save_all(object_list, Client)
 
 
 class GlobalTypeView(ConnectorView):
