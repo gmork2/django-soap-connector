@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class ClientView(BaseAPIView):
     """
-
+    This class defines a CRUD interface for client objects.
     """
     serializer_class = ClientSerializer
     object_class = Client
@@ -28,7 +28,8 @@ class ClientView(BaseAPIView):
 
 class ConnectorView(ClientView):
     """
-
+    Class to provide read-only methods to interact with a SOAP
+    server through connector.
     """
     source_name: ClassVar[str] = ''
     object_pk_name: ClassVar[str] = ''
@@ -36,6 +37,8 @@ class ConnectorView(ClientView):
     @property
     def allowed_methods(self):
         """
+        The list of HTTP method names that this view will
+        accept.
 
         :return:
         """
@@ -43,6 +46,8 @@ class ConnectorView(ClientView):
 
     def list(self, request: Request, **kwargs) -> Response:
         """
+        Concrete view for listing a collection of objects
+        from connector.
 
         :param request:
         :param kwargs:
@@ -63,6 +68,7 @@ class ConnectorView(ClientView):
 
     def get(self, request: Request, **kwargs) -> Response:
         """
+        Concrete view for retrieve an object by object_pk_name.
 
         :param request:
         :param kwargs:
@@ -112,24 +118,36 @@ class ConnectorView(ClientView):
 
 
 class GlobalTypeView(ConnectorView):
+    """
+    Class to retrieve information about global types.
+    """
     object_class = Type
     source_name: ClassVar[str] = 'global_types'
     object_pk_name: ClassVar[str] = 'type_pk'
 
 
 class GlobalElementView(ConnectorView):
+    """
+    Class to retrieve information about elements.
+    """
     object_class = Element
     source_name: ClassVar[str] = 'global_elements'
     object_pk_name: ClassVar[str] = 'element_pk'
 
 
 class PrefixView(ConnectorView):
+    """
+    Class to retrieve information about prefixes.
+    """
     object_class = type('Prefix', (), {})
     source_name: ClassVar[str] = 'prefixes'
     object_pk_name: ClassVar[str] = 'prefix_pk'
 
 
 class BindingView(ConnectorView):
+    """
+    Class to retrieve information about bindings.
+    """
     object_class = Binding
     source_name: ClassVar[str] = 'bindings'
     object_pk_name: ClassVar[str] = 'binding_pk'
