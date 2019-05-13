@@ -53,32 +53,12 @@ def parser(parts: Optional[List[str]] = ()):
 
 
 def signature(soap_message: SoapMessage):
-    if not soap_message.envelope:
-        return None
-
-    if soap_message.body:
-        parts = [soap_message.body.type.signature(schema=soap_message.wsdl.types, standalone=False)]
-
-        # print("PARTS: ", parts)
-        # print("TYPE: ", soap_message.body.type)
-        # print("ELEMENTS: ", soap_message.body.type.elements)
-        # print("ELEMENTS_NESTED: ", soap_message.body.type.elements_nested)
-        # print("ATTRIBUTES: ", soap_message.body.type.attributes)
-
-        for element in soap_message.body.type.elements:
-            # print("0: ", element[0])
-            # print("1: ", element[1].get_prefixed_name(soap_message.wsdl.types), type(element[1].type).__name__)
-            pass
-
-    else:
-        parts = []
-
-        # if soap_message.header.type._element:
-        #     print("ELEMENT: ", soap_message.header.type._element, type(soap_message.header.type._element))
-        #     print("TYPE: ", soap_message.header.type, type(soap_message.header.type))
-        #
-        #     parts.append('_soapheaders={%s}' % soap_message.header.type.signature(
-        #         schema=soap_message.wsdl.types, standalone=False))
+    """
+    
+    :param soap_message:
+    :return:
+    """
+    parts = []
 
     return parts
 
