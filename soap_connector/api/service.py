@@ -15,22 +15,16 @@ class ServiceView(ConnectorView):
 
     def save(self, object_list):
         """
+        Saves service, ports and operations objects.
 
         :param object_list:
         :return:
         """
-        for _service in object_list:
-            self.set_context(Service)
-            self.cache[_service['pk']] = _service
-
-            for _port in _service['ports']:
-                self.set_context(Port)
-                self.cache[_port['pk']] = _port
-
-                for _operation in _port['operations']:
-                    self.set_context(Operation)
-                    self.cache[_operation['pk']] = _operation
-        self.set_context(Service)
+        lookup = [
+            ('ports', Port),
+            ('operations', Operation)
+        ]
+        self.save_all(object_list, Service, lookup)
 
 
 service = ServiceView.as_view()
