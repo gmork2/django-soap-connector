@@ -17,6 +17,7 @@ Context = Dict[
 
 def make_key(context: Context, sufix: str) -> str:
     """
+    A custom key function for processing to the final key.
 
     :return:
     """
@@ -28,15 +29,17 @@ def make_key(context: Context, sufix: str) -> str:
 
 class CacheIterator(object):
     """
-    This class traverses and caches the elements in iterable
-    object according context provided by view.
+    Caches the elements in iterable object according context
+    provided by view.
     """
     def __init__(self, object_list: ObjectList, cls: type,
                  view: "BaseAPIView"):
         """
+        Initialize the iterator.
 
         :param object_list:
         :param cls:
+        :param view:
         """
         self.index = 0
 
@@ -72,10 +75,11 @@ class CacheIterator(object):
 
 class Registry(object):
     """
-
+    Manages a registry of cache versions for each context.
     """
     def __init__(self, context: Context):
         """
+        Initialize the registry using provided context.
 
         :return:
         """
@@ -89,6 +93,7 @@ class Registry(object):
 
     def retrieve(self) -> Union[Dict[str, list], List[int]]:
         """
+        Retrieve a list of cache versions.
 
         :return:
         """
@@ -100,6 +105,7 @@ class Registry(object):
 
     def insert(self, version: int) -> None:
         """
+        Adds a version in the registry.
 
         :param version:
         :return:
@@ -112,6 +118,7 @@ class Registry(object):
 
     def remove(self, version: int) -> None:
         """
+        Removes a version from the registry.
 
         :param version:
         :return:
@@ -124,6 +131,7 @@ class Registry(object):
 
     def update(self, versions: List[int]) -> None:
         """
+        Updates the contents of the cache registry.
 
         :param versions:
         :return:
@@ -136,6 +144,8 @@ class Registry(object):
 
     def __str__(self):
         """
+        Displays the contents of the record for the current
+        context.
 
         :return:
         """
@@ -148,6 +158,7 @@ class Cache(object):
     """
     def __init__(self, context: Context):
         """
+        Initialize the cache object.
 
         :param context:
         """
@@ -159,6 +170,7 @@ class Cache(object):
 
     def __getitem__(self, version: int) -> dict:
         """
+        Gets element from cache by version.
 
         :param version:
         :return:
@@ -168,6 +180,7 @@ class Cache(object):
 
     def __setitem__(self, version: int, data: dict) -> None:
         """
+        Sets element to cache by version.
 
         :param version:
         :param data:
@@ -178,7 +191,7 @@ class Cache(object):
 
     def __delitem__(self, version) -> None:
         """
-
+        Removes element from cache by version.
 
         :param version:
         :return:
@@ -189,6 +202,8 @@ class Cache(object):
 
     def __contains__(self, version: int):
         """
+        Returns true if registry contains the version for the
+        current context, otherwise returns false.
 
         :param version:
         :return:
@@ -198,6 +213,8 @@ class Cache(object):
 
     def set_context(self, context: Context) -> None:
         """
+        Initializes the registry with the provided context and
+        generates a key used to save items in cache.
 
         :param context:
         :return:
@@ -209,6 +226,7 @@ class Cache(object):
 
     def values(self) -> ObjectList:
         """
+        Returns a list of items from cache.
 
         :return:
         """
