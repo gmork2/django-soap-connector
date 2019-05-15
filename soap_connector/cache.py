@@ -15,7 +15,7 @@ Context = Dict[
 ]
 
 
-def make_key(context, sufix: str) -> str:
+def make_key(context: Context, sufix: str) -> str:
     """
 
     :return:
