@@ -105,4 +105,36 @@ class OperationSerializer(serializers.Serializer,
     """
 
     """
-    pass
+    def __init__(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        """
+        super(OperationSerializer, self).__init__(*args, **kwargs)
+        parts = signature(self.operation.input)
+
+        for qname, _type in parser(parts):
+            self.fields[qname] = serializers.CharField(help_text=_type)
+        self.fields['response'] = serializers.CharField(read_only=True)
+
+    def validate(self, attrs):
+        """
+
+        :param attrs:
+        :return:
+        """
+        client = self.connector.client.bind(
+            self.service.name,
+            self.port.name
+        )
+        try:
+            result = getattr(client, self.operation.name)(**attrs)
+        except Exception as e:
+            print(e, type(e))
+            raise serializers.ValidationError(e)
+
+        # TODO: Save result
+        attrs.update(response=str(result))
+
+        return attrs

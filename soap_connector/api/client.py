@@ -26,6 +26,7 @@ class ClientView(BaseAPIView):
     object_class = Client
 
 
+# TODO: Move to api.connector
 class ConnectorView(ClientView):
     """
     Class to provide read-only methods to interact with a SOAP
