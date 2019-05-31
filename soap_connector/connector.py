@@ -1,7 +1,6 @@
 import logging
 import operator
 import math
-from typing import List, Optional
 
 from django.template.defaultfilters import slugify
 
@@ -9,8 +8,6 @@ from rest_framework.reverse import reverse
 
 from zeep.client import Client
 from zeep.wsdl.definitions import Service, Port
-
-from zeep import xsd
 
 from soap_connector.serializers import ClientSerializer
 from soap_connector.api.base import BaseAPIView
