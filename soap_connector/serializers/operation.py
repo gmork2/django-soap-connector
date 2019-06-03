@@ -115,6 +115,7 @@ class OperationSerializer(serializers.Serializer,
         parts = signature(self.operation.input)
 
         for qname, _type in parser(parts):
+            # TODO: Set field type by _type
             self.fields[qname] = serializers.CharField(help_text=_type)
         self.fields['response'] = serializers.CharField(read_only=True)
 
@@ -134,7 +135,7 @@ class OperationSerializer(serializers.Serializer,
             print(e, type(e))
             raise serializers.ValidationError(e)
 
-        # TODO: Save result
+        # TODO: Cache result
         attrs.update(response=str(result))
 
         return attrs

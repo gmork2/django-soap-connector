@@ -73,6 +73,7 @@ class CacheIterator(object):
             return obj
 
 
+# TODO: Convert to singleton
 class Registry(object):
     """
     Manages a registry of cache versions for each context.
@@ -103,6 +104,7 @@ class Registry(object):
             return registry.get(self.cls.__name__, [])
         return {self.cls.__name__: []}
 
+    # TODO: Set a timeout
     def insert(self, version: int) -> None:
         """
         Adds a version in the registry.
@@ -152,6 +154,7 @@ class Registry(object):
         return f'{self.key} -> {cache.get(self.key, None)}'
 
 
+# TODO: Convert to singleton
 class Cache(object):
     """
     Cache protocol wrapping django's cache.
