@@ -75,6 +75,7 @@ class SerializerMixin(object):
         }
 
 
+# TODO: Default allowed methods
 class BaseAPIView(SerializerMixin, APIView):
     """
     This class extends REST framework's APIView class, adding

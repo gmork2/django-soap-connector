@@ -1,7 +1,6 @@
 import logging
 import operator
 import math
-from typing import List, Optional
 
 from django.template.defaultfilters import slugify
 
@@ -9,8 +8,6 @@ from rest_framework.reverse import reverse
 
 from zeep.client import Client
 from zeep.wsdl.definitions import Service, Port
-from zeep.wsdl.messages.soap import SoapMessage
-from zeep import xsd
 
 from soap_connector.serializers import ClientSerializer
 from soap_connector.api.base import BaseAPIView
@@ -36,31 +33,6 @@ def from_number(n: int) -> str:
     :return:
     """
     return n.to_bytes(math.ceil(n.bit_length() / 8), 'little').decode()
-
-
-def parser(parts: Optional[List[str]] = ()):
-    """
-    Returns a parser signature.
-
-    :param parts:
-    :return:
-    """
-    for part in parts:
-        params = part.split(', ')
-        for param in params:
-            qname, _type = param.split(': ')
-            yield qname, _type
-
-
-def signature(soap_message: SoapMessage):
-    """
-    
-    :param soap_message:
-    :return:
-    """
-    parts = []
-
-    return parts
 
 
 class Connector(object):
