@@ -128,6 +128,17 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return cache
 
+    def get_object(self, pk):
+        """
+
+        :param pk:
+        :return:
+        """
+        pk = self.kwargs.get('pk', None)
+
+        if pk is not None:
+            return self.cache[pk]
+
     def list(self, request: Request, *args, **kwargs) -> Response:
         """
         Concrete view for listing a collection of objects.
