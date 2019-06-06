@@ -66,8 +66,7 @@ class Connector(object):
                 "from cache."
                 % cls.__name__)
         context = view.get_serializer_context()
-        pk = view.kwargs['pk']
-        client = view.cache[pk]
+        client = view.get_object()
         if client:
             return cls(client, context=context)
 

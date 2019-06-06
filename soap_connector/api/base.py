@@ -128,16 +128,14 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return cache
 
-    def get_object(self, pk):
+    def get_object(self, pk=None):
         """
 
         :param pk:
         :return:
         """
-        pk = self.kwargs.get('pk', None)
-
-        if pk is not None:
-            return self.cache[pk]
+        obj = self.cache[pk or self.kwargs.get('pk', None)]
+        return obj
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         """
@@ -163,7 +161,7 @@ class BaseAPIView(SerializerMixin, APIView):
         if pk is None:
             return self.list(request)
         else:
-            data: dict = self.cache[pk]
+            data: dict = self.get_object(pk)
             if data is not None:
                 return Response(data, status=status.HTTP_200_OK)
 
