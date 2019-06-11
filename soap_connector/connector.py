@@ -167,7 +167,7 @@ class Connector(object):
             url = self.resolver('service', service_pk=pk)
             object_list.append({
                 'pk': pk,
-                'service': service.name,
+                'name': service.name,
                 'ports': self.ports(service),
                 'url': url
             })
@@ -185,7 +185,7 @@ class Connector(object):
             url = self.resolver('port', service_pk=slugify(service.name), port_pk=pk)
             object_list.append({
                 'pk': pk,
-                'port': port.name,
+                'name': port.name,
                 'operations': self.operations(service, port),
                 'url': url
             })
