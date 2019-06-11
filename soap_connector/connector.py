@@ -209,7 +209,7 @@ class Connector(object):
                 service_pk=slugify(service.name),
                 port_pk=slugify(port.name),
                 operation_pk=pk)
-            object_list.append({'pk': pk, 'operation': operation.name, 'url': url})
+            object_list.append({'pk': pk, 'name': operation.name, 'url': url})
 
         return object_list
 
