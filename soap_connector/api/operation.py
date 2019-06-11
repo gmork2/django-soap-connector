@@ -37,9 +37,7 @@ class OperationView(ConnectorView):
             data=request.data, context=context
         )
         if serializer.is_valid():
-            data: dict = serializer.create(serializer.data)
-            return Response(data, status=status.HTTP_200_OK)
-
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
 
 
