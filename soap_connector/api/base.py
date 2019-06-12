@@ -215,7 +215,6 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        # TODO: Check updatable using self.get_object(pk)
         if self.object_pk_name not in kwargs or \
                 kwargs[self.object_pk_name] not in self.cache:
             return Response(status=status.HTTP_400_BAD_REQUEST)
