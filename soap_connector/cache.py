@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union, Optional, Type
 
 from django.core.cache import cache
 
@@ -25,6 +25,31 @@ def make_key(context: Context, sufix: str) -> str:
         str(context['request'].user.id),
         sufix
     ])
+
+
+class SingletonDecorator:
+    """
+
+    """
+    def __init__(self, cls: Type):
+        """
+
+        :param cls:
+        """
+        self.cls = cls
+        self.instance = None
+
+    def __call__(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwds:
+        :return:
+        """
+        if self.instance is None:
+            self.instance = self.cls(*args, **kwargs)
+
+        return self.instance
 
 
 class CacheIterator(object):
