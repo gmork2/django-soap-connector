@@ -66,7 +66,7 @@ class ConnectorMixin(object):
 
         with view.context(cls):
             pk = view.kwargs[pk_name]
-            return view.cache[pk]['name']
+            return view.get_object(pk)['name']
 
     @property
     def service(self):
