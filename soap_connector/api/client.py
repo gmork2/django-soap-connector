@@ -14,6 +14,7 @@ from soap_connector.serializers import ClientSerializer
 from soap_connector.api.base import BaseAPIView
 from soap_connector.connector import Connector
 from soap_connector.cache import CacheIterator
+from soap_connector.exceptions import ConnectorError, CacheError
 
 logger = logging.getLogger(__name__)
 
@@ -26,14 +27,12 @@ class ClientView(BaseAPIView):
     object_class = Client
 
 
-# TODO: Move to api.connector
 class ConnectorView(ClientView):
     """
     Class to provide read-only methods to interact with a SOAP
     server through connector.
     """
     source_name: ClassVar[str] = ''
-    object_pk_name: ClassVar[str] = ''
 
     @property
     def allowed_methods(self):
@@ -54,17 +53,16 @@ class ConnectorView(ClientView):
         :param kwargs:
         :return:
         """
-        data = None
-
         with self.context(Client):
-            connector = Connector.from_view(self)
-            if connector is not None:
+            try:
+                connector = Connector.from_view(self)
+            except (CacheError, ConnectorError):
+                return Response(status=status.HTTP_409_CONFLICT)
+            else:
                 data = getattr(connector, self.source_name)
-
-        if data:
-            self.save(data)
-            return Response(data, status=status.HTTP_200_OK)
-
+                if data:
+                    self.save(data)
+                    return Response(data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request: Request, **kwargs) -> Response:
