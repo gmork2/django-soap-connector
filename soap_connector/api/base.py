@@ -1,6 +1,8 @@
 from typing import Type, List, ClassVar
 from contextlib import contextmanager
 
+from django.http import Http404
+
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -82,9 +84,10 @@ class BaseAPIView(SerializerMixin, APIView):
     commonly required behavior for standard list and detail views.
     """
     object_class: ClassVar[type] = None
+    object_pk_name: ClassVar[str] = 'pk'
 
     def set_context(self, object_class: type,
-                    serializer_class: Type[Serializer] = None):
+                    serializer_class: Type[Serializer] = None) -> None:
         """
         Set a new context.
 
@@ -157,7 +160,7 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        pk: int = kwargs.get('pk', None)
+        pk: int = kwargs.get(self.object_pk_name, None)
         if pk is None:
             return self.list(request)
         else:
@@ -187,6 +190,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
 
+    # TODO: Replace self.cache[pk] by self.get_object(pk)
     def delete(self, request: Request, *args, **kwargs) -> Response:
         """
         Concrete view for deleting an object.
@@ -194,7 +198,7 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        pk: int = kwargs.get('pk', None)
+        pk: int = kwargs.get(self.object_pk_name, None)
 
         if pk is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -211,8 +215,9 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        if 'pk' not in kwargs or \
-                kwargs['pk'] not in self.cache:
+        # TODO: Check updatable using self.get_object(pk)
+        if self.object_pk_name not in kwargs or \
+                kwargs[self.object_pk_name] not in self.cache:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
             context: Context = self.get_serializer_context()
