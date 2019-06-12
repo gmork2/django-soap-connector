@@ -190,7 +190,6 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
 
-    # TODO: Replace self.cache[pk] by self.get_object(pk)
     def delete(self, request: Request, *args, **kwargs) -> Response:
         """
         Concrete view for deleting an object.
@@ -199,11 +198,12 @@ class BaseAPIView(SerializerMixin, APIView):
         :return:
         """
         pk: int = kwargs.get(self.object_pk_name, None)
-
         if pk is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        elif self.cache[pk]:
-            del self.cache[pk]
+
+        obj = self.get_object(pk)
+        if obj:
+            del obj
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
