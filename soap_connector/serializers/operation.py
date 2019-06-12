@@ -116,7 +116,7 @@ class OperationSerializer(serializers.Serializer,
 
         for qname, _type in parser(parts):
             # TODO: Set field type by _type
-            self.fields[qname] = serializers.CharField(help_text=_type)
+            self.fields[qname] = serializers.CharField(help_text=_type, write_only=True)
         self.fields['response'] = serializers.CharField(read_only=True)
 
     def validate(self, attrs):
@@ -135,7 +135,7 @@ class OperationSerializer(serializers.Serializer,
             print(e, type(e))
             raise serializers.ValidationError(e)
 
-        # TODO: Cache result
+        # TODO: Cache response
         attrs.update(response=str(result))
 
         return attrs
