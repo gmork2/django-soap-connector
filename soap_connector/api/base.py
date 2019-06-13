@@ -1,7 +1,5 @@
-from typing import Type, List, ClassVar
+from typing import Type, List, ClassVar, Optional
 from contextlib import contextmanager
-
-from django.http import Http404
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -131,7 +129,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return cache
 
-    def get_object(self, pk=None):
+    def get_object(self, pk: Optional[int] = None) -> dict:
         """
 
         :param pk:
