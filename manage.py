@@ -10,6 +10,7 @@ settings.configure(
     DEBUG=True,
     SECRET_KEY='A-random-secret-key!',
     ROOT_URLCONF=sys.modules[__name__],
+    ALLOWED_HOST=['*'],
     INSTALLED_APPS=(
         'django.contrib.auth',
         'django.contrib.contenttypes',
