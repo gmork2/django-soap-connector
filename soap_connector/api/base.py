@@ -98,6 +98,7 @@ class BaseAPIView(SerializerMixin, APIView):
         if serializer_class is not None:
             self.serializer_class = serializer_class
 
+    # TODO: Rename method to with_context
     @contextmanager
     def context(self, object_class: type,
                 serializer_class: Type[Serializer] = None) -> None:
