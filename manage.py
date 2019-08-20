@@ -1,9 +1,12 @@
 import sys
+import os
 
 from django.conf import settings
 from django.core.management import execute_from_command_line
 
 from django.conf.urls import url, include
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 settings.configure(
@@ -17,6 +20,12 @@ settings.configure(
         'rest_framework',
         'soap_connector'
     ),
+    DATABASES={
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    },
     REST_FRAMEWORK={
         'DEFAULT_PERMISSION_CLASSES': (
             'rest_framework.permissions.AllowAny',
