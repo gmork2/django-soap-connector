@@ -84,6 +84,8 @@ class BaseAPIView(SerializerMixin, APIView):
     object_class: ClassVar[type] = None
     object_pk_name: ClassVar[str] = 'pk'
 
+    get_context = SerializerMixin.get_serializer_context
+
     def set_context(self, object_class: type,
                     serializer_class: Type[Serializer] = None) -> None:
         """
@@ -124,7 +126,7 @@ class BaseAPIView(SerializerMixin, APIView):
 
         :return:
         """
-        context: Context = self.get_serializer_context()
+        context: Context = self.get_context()
         cache = Cache(context)
 
         return cache
