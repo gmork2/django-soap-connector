@@ -53,7 +53,7 @@ class ConnectorView(ClientView):
         :param kwargs:
         :return:
         """
-        with self.context(Client):
+        with self.with_context(Client):
             try:
                 connector = Connector.from_view(self)
             except (CacheError, ConnectorError):
