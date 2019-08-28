@@ -93,7 +93,7 @@ class CacheIterator(object):
 
         self.index += 1
 
-        with self.view.context(self.cls):
+        with self.view.with_context(self.cls):
             self.view.cache[obj['pk']] = obj
             return obj
 
