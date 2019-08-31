@@ -128,19 +128,19 @@ class Registry(object):
             return registry.get(self.cls.__name__, [])
         return {self.cls.__name__: []}
 
-    # TODO: Set a timeout
-    def insert(self, version: int) -> None:
+    def insert(self, version: int, timeout: float = None) -> None:
         """
         Adds a version in the registry.
 
         :param version:
+        :param timeout:
         :return:
         """
         versions: List[int] = self.retrieve()
 
         if version not in versions:
             versions.append(version)
-            self.update(versions)
+            self.update(versions, timeout)
 
     def remove(self, version: int) -> None:
         """
@@ -155,18 +155,19 @@ class Registry(object):
             versions.remove(version)
             self.update(versions)
 
-    def update(self, versions: List[int]) -> None:
+    def update(self, versions: List[int], timeout: float = None) -> None:
         """
         Updates the contents of the cache registry.
 
         :param versions:
+        :param timeout:
         :return:
         """
         data = {
             **cache.get(self.key),
             **{self.cls.__name__: versions}
         }
-        cache.set(self.key, data)
+        cache.set(self.key, data, timeout=timeout)
 
     def __str__(self):
         """
@@ -190,7 +191,7 @@ class Cache(object):
         """
         self.key: Optional[str] = None
         self.registry: Optional[Registry] = None
-        self.timeout = None
+        self.timeout: Optional[float] = None
 
         self.set_context(context)
 
@@ -213,7 +214,7 @@ class Cache(object):
         :return:
         """
         cache.set(self.key, data, timeout=self.timeout, version=version)
-        self.registry.insert(version)
+        self.registry.insert(version, self.timeout)
 
     def __delitem__(self, version) -> None:
         """
