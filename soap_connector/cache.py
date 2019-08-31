@@ -261,3 +261,13 @@ class Cache(object):
             cache.get(self.key, version=version)
             for version in self.registry.retrieve()
         ]
+
+    @staticmethod
+    def clear(self) -> None:
+        """
+        Delete all the keys in the cache, not just the keys set
+        by this application.
+
+        :return:
+        """
+        cache.clear()
