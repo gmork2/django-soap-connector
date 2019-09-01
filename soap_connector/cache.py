@@ -263,7 +263,7 @@ class Cache(object):
         ]
 
     @staticmethod
-    def clear(self) -> None:
+    def clear() -> None:
         """
         Delete all the keys in the cache, not just the keys set
         by this application.
