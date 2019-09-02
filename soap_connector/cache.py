@@ -195,15 +195,16 @@ class Cache(object):
 
         self.set_context(context)
 
-    def __getitem__(self, version: int) -> dict:
+    def __getitem__(self, version: int) -> Optional[dict]:
         """
         Gets element from cache by version.
 
         :param version:
         :return:
         """
-        data: dict = cache.get(self.key, version=version)
-        return data
+        if version in self:
+            data: dict = cache.get(self.key, version=version)
+            return data
 
     def __setitem__(self, version: int, data: dict) -> None:
         """
