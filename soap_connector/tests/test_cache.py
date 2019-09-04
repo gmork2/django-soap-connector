@@ -77,6 +77,80 @@ class BaseTestCase(TestCase):
         cache.clear()
 
 
+class CacheIteratorTestCase(BaseTestCase):
+    """
+
+    """
+    def setUp(self):
+        """
+
+        :return:
+        """
+        super().setUp()
+        key = CacheIterator.pk_name
+
+        self.data_list = [
+            {key: 1, 'field': 'test_1'},
+            {key: 2, 'field': 'test_2'},
+            {key: 3, 'field': 'test_3'}
+        ]
+
+    def test_iterable(self):
+        """
+
+        :return:
+        """
+        it = CacheIterator(self.data_list, DummyView, self.context['view'])
+        self.assertTrue(hasattr(it, '__iter__'))
+
+    def test_simple(self):
+        """
+
+        :return:
+        """
+        it = CacheIterator(self.data_list, DummyView, self.context['view'])
+        data_list = [i for i in it]
+
+        self.assertListEqual(data_list, self.data_list)
+
+    def test_iterate_empty_list(self):
+        """
+
+        :return:
+        """
+        it = CacheIterator([], DummyView, self.context['view'])
+        data_list = [i for i in it]
+
+        self.assertFalse(data_list)
+
+    def test_invalid_data(self):
+        """
+
+        :return:
+        """
+        data_list = [{'id': 1, 'field': 'test_1'}]
+        it = CacheIterator(data_list, DummyView, self.context['view'])
+
+        self.assertRaises(
+            KeyError, lambda: [i for i in it]
+        )
+
+    def test_cache_list(self):
+        """
+
+        :return:
+        """
+        view = self.context['view']
+        it = CacheIterator(self.data_list, DummyView, view)
+        pk_name = CacheIterator.pk_name
+
+        _ = [i for i in it]
+
+        with view.with_context(DummyView):
+            for data in self.data_list:
+                self.assertDictEqual(data, view.cache[data[pk_name]])
+
+
 class RegistryTestCase(BaseTestCase):
     """
 
@@ -141,6 +215,7 @@ class CacheTestCase(BaseTestCase):
 
     def test_get_empty_cache(self):
         """
+        Get in empty cache returns None.
 
         :return:
         """
