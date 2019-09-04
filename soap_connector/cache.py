@@ -57,6 +57,8 @@ class CacheIterator(object):
     Caches the elements in iterable object according context
     provided by view.
     """
+    pk_name = 'pk'
+
     def __init__(self, object_list: ObjectList, cls: type,
                  view: "BaseAPIView"):
         """
@@ -94,7 +96,7 @@ class CacheIterator(object):
         self.index += 1
 
         with self.view.with_context(self.cls):
-            self.view.cache[obj['pk']] = obj
+            self.view.cache[obj[self.pk_name]] = obj
             return obj
 
 
