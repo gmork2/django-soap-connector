@@ -6,47 +6,8 @@ from django.contrib.auth.models import AnonymousUser
 from rest_framework.reverse import reverse
 from rest_framework.test import APIRequestFactory
 
-from soap_connector.api.base import BaseAPIView
-from soap_connector.serializers.base import BaseSerializer as Serializer
 from soap_connector.cache import *
-
-_counter = 0
-
-
-def set_name():
-    """
-    Return a new dummy name each time this function
-    is invoked.
-
-    :return:
-    """
-    global _counter
-
-    _counter += 1
-    return 'Dummy' + str(_counter)
-
-
-class DummyView(BaseAPIView):
-    """
-    This view allows generating instances with unique
-    context.
-    """
-    serializer_class = Serializer
-
-    def __new__(cls, *args, **kwargs):
-        """
-        Set a different object_class for each instance.
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        new_cls = super().__new__(cls)
-
-        new_cls.object_class = type(
-            set_name(), (object, ), {}
-        )
-        return new_cls
+from soap_connector.tests.api.utils import DummyView
 
 
 class BaseTestCase(TestCase):
