@@ -6,9 +6,9 @@ from django.contrib.auth.models import AnonymousUser
 from rest_framework.reverse import reverse
 from rest_framework.test import APIRequestFactory
 
-from ..api.base import BaseAPIView
-from ..serializers.base import BaseSerializer as Serializer
-from ..cache import *
+from soap_connector.api.base import BaseAPIView
+from soap_connector.serializers.base import BaseSerializer as Serializer
+from soap_connector.cache import *
 
 _counter = 0
 
