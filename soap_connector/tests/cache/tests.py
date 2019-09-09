@@ -1,5 +1,6 @@
 from unittest import skip
 import time
+import collections
 
 from django.test import TestCase
 from django.contrib.auth.models import AnonymousUser
@@ -155,9 +156,8 @@ class CacheTestCase(BaseTestCase):
 
         :return:
         """
-        self.assertTrue(
-            hasattr(self.context['view'], 'cache')
-        )
+        self.assertIsNotNone(self.cache.key)
+        self.assertIsNotNone(self.cache.registry)
 
     def test_set(self):
         """
