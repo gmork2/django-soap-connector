@@ -188,11 +188,11 @@ class CacheTestCase(BaseTestCase):
         :return:
         """
         self.cache[1] = self.data
-        del self.cache[1]
         self.cache[2] = data = {
             'id': 2,
             'field': 'test_2'
         }
+        del self.cache[1]
 
         self.assertIsNone(self.cache[1])
         self.assertEqual(self.cache[2], data)
