@@ -137,7 +137,7 @@ class BaseAPIView(SerializerMixin, APIView):
         :param pk:
         :return:
         """
-        obj = self.cache[pk or self.kwargs.get('pk', None)]
+        obj = self.cache[pk]
         return obj
 
     def list(self, request: Request, *args, **kwargs) -> Response:
