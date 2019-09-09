@@ -37,7 +37,9 @@ class ClientViewTestCase(APITestCase):
         :return:
         """
         response = self.client.get(self.url)
+
         self.assertEqual(404, response.status_code)
+        self.assertFalse(response.data)
 
     def tearDown(self):
         """
