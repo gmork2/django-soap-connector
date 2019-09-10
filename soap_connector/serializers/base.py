@@ -37,8 +37,8 @@ class BaseSerializer(serializers.Serializer):
         view = self.context['view']
 
         items = view.cache.registry.retrieve()
-        if items:
-            validated_data['pk'] = items[-1] + 1
+        validated_data['pk'] = items[-1] + 1 \
+            if items else 1
 
         return self.save(validated_data)
 
