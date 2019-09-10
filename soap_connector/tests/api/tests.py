@@ -3,6 +3,7 @@ from copy import copy
 
 from django.test import TestCase
 from django.contrib.auth.models import AnonymousUser
+from django.core.cache import cache
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 from rest_framework.test import APIRequestFactory
@@ -150,3 +151,10 @@ class BaseTestCase(TestCase):
 
         :return:
         """
+
+    def tearDown(self):
+        """
+
+        :return:
+        """
+        cache.clear()
