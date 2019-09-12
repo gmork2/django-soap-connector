@@ -1,5 +1,5 @@
 from soap_connector.api.base import BaseAPIView
-from soap_connector.serializers.base import BaseSerializer as Serializer
+from soap_connector.serializers.base import BaseSerializer
 
 _counter = 0
 
@@ -17,12 +17,19 @@ def set_name():
     return 'Dummy' + str(_counter)
 
 
+class DummySerializer(BaseSerializer):
+    """
+
+    """
+    pass
+
+
 class DummyView(BaseAPIView):
     """
     This view allows generating instances with unique
     context.
     """
-    serializer_class = Serializer
+    serializer_class = DummySerializer
 
     def __new__(cls, *args, **kwargs):
         """

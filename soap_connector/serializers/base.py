@@ -1,7 +1,4 @@
-from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
-
-ERROR = _("Resource <{}> already exists.")
 
 
 class BaseSerializer(serializers.Serializer):
@@ -16,16 +13,6 @@ class BaseSerializer(serializers.Serializer):
         :param data:
         :return:
         """
-        request = self.context['request']
-        view = self.context['view']
-
-        if request.method.upper() == 'POST':
-
-            pk = data.get('pk')
-            if pk in view.cache:
-                msg = _(ERROR.format(pk))
-                raise serializers.ValidationError(msg)
-
         return data
 
     def save(self, validated_data: dict) -> dict:
@@ -34,9 +21,9 @@ class BaseSerializer(serializers.Serializer):
         :param validated_data:
         :return:
         """
-        pk = validated_data.get('pk')
-
         view = self.context['view']
+
+        pk = validated_data['pk']
         view.cache[pk] = validated_data
 
         return validated_data
@@ -47,6 +34,12 @@ class BaseSerializer(serializers.Serializer):
         :param validated_data:
         :return:
         """
+        view = self.context['view']
+
+        items = view.cache.registry.retrieve()
+        validated_data['pk'] = items[-1] + 1 \
+            if items else 1
+
         return self.save(validated_data)
 
     def update(self, pk, validated_data: dict) -> dict:
