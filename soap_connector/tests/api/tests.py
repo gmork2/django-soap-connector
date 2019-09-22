@@ -82,7 +82,7 @@ class BaseTestCase(TestCase):
             self.view.get_serializer
         )
 
-    def test_context(self):
+    def test_set_context(self):
         """
 
         :return:
@@ -96,11 +96,25 @@ class BaseTestCase(TestCase):
         self.view.cache[1] = {'pk': 1}
         self.assertIsNone(view.cache[1])
 
-        with view.with_context(object_class, serializer_class):
+    def test_context_manager(self):
+        """
+
+        :return:
+        """
+        view = copy(self.view)
+
+        object_class = type(set_name(), (), {})
+        serializer_class = BaseSerializer
+        view.set_context(object_class, serializer_class)
+
+        view.cache[1] = {'pk': 1}
+
+        with self.view.with_context(object_class, serializer_class):
             self.assertDictEqual(
                 view.cache[1], self.view.cache[1]
             )
-        self.assertIsNone(view.cache[1])
+
+        self.assertIsNone(self.view.cache[1])
 
     def test_cache(self):
         """
