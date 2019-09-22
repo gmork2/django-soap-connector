@@ -130,7 +130,104 @@ class RegistryTestCase(BaseTestCase):
 
         :return:
         """
-        pass
+        # print("KEY: ", self.registry.key)
+        # print("CLS: ", self.registry.cls)
+        # print("CACHE: ", cache.get(self.registry.key))
+
+        object_class = self.context['view'].object_class
+        key = self.registry.key
+
+        self.assertIn(object_class.__name__, cache.get(key))
+
+    def test_insert(self):
+        """
+
+        :return:
+        """
+        self.registry.insert(1)
+        self.assertIn(1, self.registry.retrieve())
+        self.registry.insert(2)
+        self.assertEqual([1, 2], self.registry.retrieve())
+
+    @skip("Not implemented")
+    def test_insert_duplicate(self):
+        """
+
+        :return:
+        """
+
+    def test_retrieve_empty_registry(self):
+        """
+
+        :return:
+        """
+        self.assertEqual([], self.registry.retrieve())
+
+    def test_remove(self):
+        """
+
+        :return:
+        """
+        self.registry.insert(1)
+        self.registry.insert(2)
+        self.registry.remove(1)
+        self.assertEqual([2], self.registry.retrieve())
+
+        self.registry.insert(3)
+        self.registry.remove(3)
+        self.assertEqual([2], self.registry.retrieve())
+
+    def test_remove_empty_registry(self):
+        """
+
+        :return:
+        """
+        self.registry.remove(1)
+        self.assertEqual([], self.registry.retrieve())
+
+    def test_update(self):
+        """
+
+        :return:
+        """
+        values = [1, 2, 3]
+
+        self.registry.update(values)
+        self.assertEqual(values, self.registry.retrieve())
+
+    def test_context(self):
+        """
+
+        :return:
+        """
+        url = reverse("soap_connector:root")
+        request = APIRequestFactory().get(url)
+        request.user = AnonymousUser()
+
+        context = {
+            'request': request,
+            'view': DummyView(request=request)
+        }
+        registry = Registry(context=context)
+
+        self.registry.insert(1)
+        registry.insert(2)
+        self.registry.insert(3)
+        registry.insert(4)
+
+        self.assertEqual([1, 3], self.registry.retrieve())
+        self.assertEqual([2, 4], registry.retrieve())
+
+    def test_expiration(self):
+        """
+        Cache values can be set to expire.
+
+        :return:
+        """
+        self.registry.insert(1, 1)
+        self.assertIn(1, self.registry.retrieve())
+        time.sleep(2)
+        self.assertEqual([], self.registry.retrieve())
 
 
 class CacheTestCase(BaseTestCase):
