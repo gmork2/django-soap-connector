@@ -130,10 +130,6 @@ class RegistryTestCase(BaseTestCase):
 
         :return:
         """
-        # print("KEY: ", self.registry.key)
-        # print("CLS: ", self.registry.cls)
-        # print("CACHE: ", cache.get(self.registry.key))
-
         object_class = self.context['view'].object_class
         key = self.registry.key
 
