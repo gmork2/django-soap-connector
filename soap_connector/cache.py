@@ -115,8 +115,8 @@ class Registry(object):
 
         data = self.retrieve()
 
-        if isinstance(data, dict):
-            cache.set(self.key, data)
+        if not data:
+            self.reset()
 
     def retrieve(self) -> Union[Dict[str, list], List[int]]:
         """
@@ -128,7 +128,7 @@ class Registry(object):
 
         if registry:
             return registry.get(self.cls.__name__, [])
-        return {self.cls.__name__: []}
+        return []
 
     def insert(self, version: int, timeout: float = None) -> None:
         """
@@ -170,6 +170,14 @@ class Registry(object):
             **{self.cls.__name__: versions}
         }
         cache.set(self.key, data, timeout=timeout)
+
+    def reset(self):
+        """
+
+        :return:
+        """
+        data = {self.cls.__name__: []}
+        cache.set(self.key, data)
 
     def __str__(self):
         """
