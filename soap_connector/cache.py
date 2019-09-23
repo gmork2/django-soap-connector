@@ -171,8 +171,9 @@ class Registry(object):
         }
         cache.set(self.key, data, timeout=timeout)
 
-    def reset(self):
+    def reset(self) -> None:
         """
+        Reset registry in current context.
 
         :return:
         """
