@@ -136,30 +136,35 @@ class BaseTestCase(TestCase):
 
         self.assertEqual(self.view.get_object(1), data)
 
+    @skip("See client.tests")
     def test_list(self):
         """
 
         :return:
         """
 
+    @skip("See client.tests")
     def test_get(self):
         """
 
         :return:
         """
 
+    @skip("See client.tests")
     def test_post(self):
         """
 
         :return:
         """
 
+    @skip("See client.tests")
     def test_delete(self):
         """
 
         :return:
         """
 
+    @skip("See client.tests")
     def test_put(self):
         """
 
