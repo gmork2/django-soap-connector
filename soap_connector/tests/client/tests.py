@@ -124,6 +124,14 @@ class ClientViewTestCase(APITestCase):
 
         :return:
         """
+        response = self.client.post(self.url, self.data)
+        url = reverse(
+            "soap_connector:client_detail",
+            kwargs={'pk': response.data['pk']})
+        r = self.client.delete(url)
+
+        self.assertContains(r, '', status_code=204)
+        self.assertIsNone(r.data)
 
     def test_delete_non_existent(self):
         """
@@ -142,12 +150,36 @@ class ClientViewTestCase(APITestCase):
 
         :return:
         """
+        data = {
+            'wsdl': 'http://www.dataaccess.com/webservicesserver/numberconversion.wso?WSDL'
+        }
+        response = self.client.post(self.url, self.data)
+        url = reverse(
+            "soap_connector:client_detail",
+            kwargs={'pk': response.data['pk']})
+        r = self.client.put(url, data)
+
+        self.assertNotEqual(r.data, response.data)
+
+    def test_update_non_existent(self):
+        """
+
+        :return:
+        """
+        url = reverse(
+            "soap_connector:client_detail",
+            kwargs={'pk': 1})
+        r = self.client.put(url, self.data)
+
+        self.assertContains(r, '', status_code=400)
 
     def test_create_put(self):
         """
 
         :return:
         """
+        response = self.client.put(self.url, self.data)
+        self.assertContains(response, '', status_code=400)
 
     def tearDown(self):
         """
