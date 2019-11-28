@@ -1,0 +1,7 @@
+site_name: django-soap-connector
+repo_url: https://github.com/gmork2/django-soap-connector
+theme: readthedocs
+nav:
+  - Home: 'index.md'
+
+dev_addr: !!python/object/apply:os.getenv ["MKDOCS_DEV_ADDR"]
