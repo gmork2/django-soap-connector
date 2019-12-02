@@ -37,11 +37,12 @@ def from_number(n: int) -> str:
 
 class Connector(object):
     """
-
+    Inspects the WSDL document and provides an API's based
+    on SOAP server interface.
     """
-
     def __init__(self, client: dict, **kwargs):
         """
+        Initialize and cache the current SOAP client.
 
         :param kwargs:
         """
@@ -56,6 +57,7 @@ class Connector(object):
     @classmethod
     def from_view(cls, view: BaseAPIView) -> "Connector":
         """
+        Provides a contextualized connector instance.
 
         :param view:
         :return:
@@ -73,6 +75,7 @@ class Connector(object):
     @property
     def prefixes(self):
         """
+        Provides namespace prefixes elements.
 
         :return:
         """
@@ -92,6 +95,7 @@ class Connector(object):
     @property
     def global_elements(self):
         """
+        Provides global elements for the given schema.
 
         :return:
         """
@@ -110,6 +114,7 @@ class Connector(object):
     @property
     def global_types(self):
         """
+        Provides global types for the given schema.
 
         :return:
         """
@@ -136,6 +141,7 @@ class Connector(object):
     @property
     def bindings(self):
         """
+        Provides binding elements supported by zeep.
 
         :return:
         """
@@ -158,6 +164,7 @@ class Connector(object):
     @property
     def services(self):
         """
+        Provides available soap services.
 
         :return:
         """
@@ -176,6 +183,7 @@ class Connector(object):
 
     def ports(self, service: Service):
         """
+        Provides available soap ports.
 
         :return:
         """
@@ -194,6 +202,7 @@ class Connector(object):
 
     def operations(self, service: Service, port: Port):
         """
+        Provides available soap operations.
 
         :return:
         """
@@ -215,6 +224,8 @@ class Connector(object):
 
     def resolver(self, name, **kwargs):
         """
+        Returns an absolute path reference matching the corresponding
+        detail view by name.
 
         :return:
         """
