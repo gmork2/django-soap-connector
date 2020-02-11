@@ -4,7 +4,7 @@ cached-property==1.5.1
 certifi==2019.3.9
 chardet==3.0.4
 defusedxml==0.5.0
-Django==2.2.8
+Django==2.2.10
 django-extensions==2.1.2
 djangorestframework==3.9.2
 idna==2.8
