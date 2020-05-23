@@ -3,7 +3,7 @@ import os
 
 from django.conf import settings
 from django.core.management import execute_from_command_line
-
+from django.http import HttpResponseRedirect
 from django.conf.urls import url, include
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,6 +33,7 @@ settings.configure(
     })
 
 urlpatterns = [
+    url(r'^$', lambda r: HttpResponseRedirect('api/')),
     url(r'^api/', include(('soap_connector.urls', 'soap_connector'), namespace='soap_connector')),
 ]
 
