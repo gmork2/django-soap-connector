@@ -148,10 +148,7 @@ class BaseAPIView(SerializerMixin, APIView):
         :return:
         """
         object_list: List[dict] = self.cache.values()
-        if object_list:
-            return Response(object_list, status=status.HTTP_200_OK)
-
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(object_list, status=status.HTTP_200_OK)
 
     def get(self, request: Request, *args, **kwargs) -> Response:
         """

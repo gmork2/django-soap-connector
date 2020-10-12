@@ -61,7 +61,7 @@ class ClientViewTestCase(APITestCase):
         """
         response = self.client.get(self.url)
 
-        self.assertEqual(404, response.status_code)
+        self.assertEqual(200, response.status_code)
         self.assertFalse(response.data)
 
     def test_post(self):
