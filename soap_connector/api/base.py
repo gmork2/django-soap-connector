@@ -160,12 +160,11 @@ class BaseAPIView(SerializerMixin, APIView):
         pk: int = kwargs.get(self.object_pk_name, None)
         if pk is None:
             return self.list(request)
-        else:
-            data: dict = self.get_object(pk)
-            if data is not None:
-                return Response(data, status=status.HTTP_200_OK)
 
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        data: Optional[dict] = self.get_object(pk)
+        code: int = status.HTTP_200_OK if data else status.HTTP_404_NOT_FOUND
+
+        return Response(data, status=code)
 
     def post(self, request: Request, *args, **kwargs) -> Response:
         """
