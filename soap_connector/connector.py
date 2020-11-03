@@ -1,6 +1,7 @@
 import logging
 import operator
 import math
+from typing import List
 
 from django.template.defaultfilters import slugify
 
@@ -73,7 +74,7 @@ class Connector(object):
             return cls(client, context=context)
 
     @property
-    def prefixes(self):
+    def prefixes(self) -> List[dict]:
         """
         Provides namespace prefixes elements.
 
@@ -93,7 +94,7 @@ class Connector(object):
         return object_list
 
     @property
-    def global_elements(self):
+    def global_elements(self) -> List[dict]:
         """
         Provides global elements for the given schema.
 
@@ -112,7 +113,7 @@ class Connector(object):
         return object_list
 
     @property
-    def global_types(self):
+    def global_types(self) -> List[dict]:
         """
         Provides global types for the given schema.
 
@@ -139,7 +140,7 @@ class Connector(object):
         return object_list
 
     @property
-    def bindings(self):
+    def bindings(self) -> List[dict]:
         """
         Provides binding elements supported by zeep.
 
@@ -162,7 +163,7 @@ class Connector(object):
         return object_list
 
     @property
-    def services(self):
+    def services(self) -> List[dict]:
         """
         Provides available soap services.
 
@@ -181,7 +182,7 @@ class Connector(object):
 
         return object_list
 
-    def ports(self, service: Service):
+    def ports(self, service: Service) -> List[dict]:
         """
         Provides available soap ports.
 
@@ -200,7 +201,7 @@ class Connector(object):
 
         return object_list
 
-    def operations(self, service: Service, port: Port):
+    def operations(self, service: Service, port: Port) -> List[dict]:
         """
         Provides available soap operations.
 
@@ -222,7 +223,7 @@ class Connector(object):
 
         return object_list
 
-    def resolver(self, name, **kwargs):
+    def resolver(self, name, **kwargs) -> str:
         """
         Returns an absolute path reference matching the corresponding
         detail view by name.
