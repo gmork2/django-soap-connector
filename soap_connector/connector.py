@@ -232,6 +232,6 @@ class Connector(object):
         """
         return reverse(
             f'soap_connector:client_' + name + '_detail',
-            kwargs={'pk': self.client_pk, **kwargs},
+            kwargs={self.context['view'].lookup_url_kwarg: self.client_pk, **kwargs},
             request=self.context['request']
         )

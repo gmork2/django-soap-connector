@@ -100,11 +100,8 @@ class ConnectorMixin(object):
         return ops[operation_name]
 
 
-class OperationSerializer(serializers.Serializer,
-                          ConnectorMixin):
-    """
+class OperationSerializer(serializers.Serializer, ConnectorMixin):
 
-    """
     def __init__(self, *args, **kwargs):
         """
 
