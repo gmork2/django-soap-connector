@@ -22,7 +22,7 @@ def make_key(context: Context, sufix: str) -> str:
     :return:
     """
     return ':'.join([
-        str(context['request'].user.id) or str(0),
+        str(context['request'].user.id or 0),
         sufix
     ])
 
