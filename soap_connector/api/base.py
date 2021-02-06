@@ -294,26 +294,6 @@ class ConnectorView(BaseAPIView):
                     return Response(data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def get(self, request: Request, **kwargs) -> Response:
-        """
-        Concrete view for retrieve an object by object_pk_name.
-
-        :param request:
-        :param kwargs:
-        :return:
-        """
-
-        object_pk: int = kwargs.get(self.object_pk_name, None)
-
-        if object_pk is None:
-            return self.list(request, **kwargs)
-        else:
-            data: dict = self.cache[object_pk]
-            if data is not None:
-                return Response(data, status=status.HTTP_200_OK)
-
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
     def save_all(self, object_list, cls, lookup=None):
         """
         Iterates on object_list and its recursively nested lists.
