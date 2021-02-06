@@ -96,7 +96,6 @@ ENV/
 .idea/
 
 # Django stuff:
-migrations/
 *.log
 *.pot
 
