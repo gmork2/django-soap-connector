@@ -59,7 +59,7 @@ class ConnectorView(ClientView):
             except (CacheError, ConnectorError):
                 return Response(status=status.HTTP_409_CONFLICT)
             else:
-                data = getattr(connector, self.source_name)
+                data = getattr(connector, self.source_name, None)
                 if data:
                     self.save(data)
                     return Response(data, status=status.HTTP_200_OK)
