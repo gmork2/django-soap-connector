@@ -13,6 +13,10 @@ class BaseSerializer(serializers.Serializer):
         :param data:
         :return:
         """
+        view = self.context['view']
+        items = view.cache.registry.retrieve()
+        data['pk'] = items[-1] + 1 if items else 1
+
         return data
 
     def save(self, validated_data: dict) -> dict:
@@ -34,12 +38,6 @@ class BaseSerializer(serializers.Serializer):
         :param validated_data:
         :return:
         """
-        view = self.context['view']
-
-        items = view.cache.registry.retrieve()
-        validated_data['pk'] = items[-1] + 1 \
-            if items else 1
-
         return self.save(validated_data)
 
     def update(self, pk, validated_data: dict) -> dict:
