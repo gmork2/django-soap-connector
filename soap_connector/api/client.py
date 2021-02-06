@@ -25,6 +25,7 @@ class ClientView(BaseAPIView):
     """
     serializer_class = ClientSerializer
     object_class = Client
+    object_pk_name: ClassVar[str] = 'client_pk'
 
 
 class ConnectorView(ClientView):
