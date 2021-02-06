@@ -41,7 +41,18 @@ def registry(request):
     :param request:
     :return:
     """
-    return Response({k: cache.get(k) for k in Registry.store})
+    response = dict()
+    versions = {k: cache.get(k) for k in Registry.store}
+
+    for key, value in versions.items():
+        user_id = key.split(':')[0]
+        response[key] = {}
+        for cls, pk_list in value.items():
+            response[key][cls] = {}
+            for pk in pk_list:
+                data = cache.get(':'.join([user_id, cls]), version=pk)
+                response[key][cls][pk] = data
+    return Response(response)
 
 
 class SerializerMixin(object):
@@ -95,7 +106,7 @@ class BaseAPIView(SerializerMixin, APIView):
     commonly required behavior for standard list and detail views.
     """
     object_class: ClassVar[type] = None
-    object_pk_name: ClassVar[str] = 'pk'
+    object_pk_name: ClassVar[str] = None
 
     get_context = SerializerMixin.get_serializer_context
 
@@ -186,7 +197,7 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        if 'pk' in kwargs:
+        if self.object_pk_name in kwargs:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         context: Context = self.get_serializer_context()
