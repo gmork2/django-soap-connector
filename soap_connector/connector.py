@@ -10,9 +10,6 @@ from rest_framework.reverse import reverse
 from zeep.client import Client
 from zeep.wsdl.definitions import Service, Port
 
-from soap_connector.serializers import ClientSerializer
-from soap_connector.api.base import BaseAPIView
-
 logger = logging.getLogger(__name__)
 
 
@@ -47,6 +44,8 @@ class Connector(object):
 
         :param kwargs:
         """
+        from soap_connector.serializers import ClientSerializer
+
         fields = {
             key: value for key, value in client.items()
             if client and key in ClientSerializer.Meta.fields
@@ -56,7 +55,7 @@ class Connector(object):
         self.context = kwargs['context']
 
     @classmethod
-    def from_view(cls, view: BaseAPIView) -> "Connector":
+    def from_view(cls, view: 'BaseAPIView') -> "Connector":
         """
         Provides a contextualized connector instance.
 

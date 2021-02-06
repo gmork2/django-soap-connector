@@ -11,8 +11,13 @@ from rest_framework.request import Request
 from rest_framework.reverse import reverse
 from rest_framework.serializers import Serializer
 
+from zeep.client import Client
+
 from soap_connector.cache import Cache, Context
 from soap_connector.cache import Registry
+from soap_connector.connector import Connector
+from soap_connector.cache import CacheIterator
+from soap_connector.exceptions import ConnectorError, CacheError
 
 URL_NAMES = [
     'settings', 'client', 'signature', 'username_token', 'registry'
@@ -249,3 +254,92 @@ class BaseAPIView(SerializerMixin, APIView):
                 return Response(data, status=status.HTTP_200_OK)
 
             return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
+
+
+class ConnectorView(BaseAPIView):
+    """
+    Class to provide read-only methods to interact with a SOAP
+    server through connector.
+    """
+    source_name: ClassVar[str] = ''
+
+    @property
+    def allowed_methods(self):
+        """
+        The list of HTTP method names that this view will
+        accept.
+
+        :return:
+        """
+        return ['GET']
+
+    def list(self, request: Request, **kwargs) -> Response:
+        """
+        Concrete view for listing a collection of objects
+        from connector.
+
+        :param request:
+        :param kwargs:
+        :return:
+        """
+        with self.with_context(Client):
+            try:
+                connector = Connector.from_view(self)
+            except (CacheError, ConnectorError):
+                return Response(status=status.HTTP_409_CONFLICT)
+            else:
+                data = getattr(connector, self.source_name, None)
+                if data:
+                    self.save(data)
+                    return Response(data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def get(self, request: Request, **kwargs) -> Response:
+        """
+        Concrete view for retrieve an object by object_pk_name.
+
+        :param request:
+        :param kwargs:
+        :return:
+        """
+
+        object_pk: int = kwargs.get(self.object_pk_name, None)
+
+        if object_pk is None:
+            return self.list(request, **kwargs)
+        else:
+            data: dict = self.cache[object_pk]
+            if data is not None:
+                return Response(data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def save_all(self, object_list, cls, lookup=None):
+        """
+        Iterates on object_list and its recursively nested lists.
+
+        :param object_list: Current object list
+        :param cls: Class to which the context belongs
+        :param lookup: Indicates the sublists on which to nest
+        :return:
+        """
+        iterator = CacheIterator(object_list, cls, self)
+
+        while True:
+            try:
+                item = next(iterator)
+                if lookup:
+                    key, cls = lookup.pop(0)
+                    self.save_all(item[key], cls, lookup)
+
+            except StopIteration:
+                break
+
+    def save(self, object_list):
+        """
+        Saves an object list.
+
+        :param object_list:
+        :return:
+        """
+        self.save_all(object_list, Client)
