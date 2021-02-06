@@ -8,7 +8,6 @@ class HyperlinkedField(HyperlinkedIdentityField):
     This is in contrast to `HyperlinkedRelatedField` which represents the
     URL of relationships to other objects.
     """
-    lookup_field = 'pk'
 
     def get_url(self, obj, view_name, request, format):
         """
@@ -18,6 +17,6 @@ class HyperlinkedField(HyperlinkedIdentityField):
         attributes are not configured to correctly match the URL conf.
         """
         lookup_value = obj[self.lookup_field]
-        kwargs = {self.lookup_url_kwarg: lookup_value}
+        kwargs = {request.parser_context['view'].lookup_url_kwarg: lookup_value}
 
         return self.reverse(view_name, kwargs=kwargs, request=request, format=format)

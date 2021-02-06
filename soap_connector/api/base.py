@@ -107,6 +107,7 @@ class BaseAPIView(SerializerMixin, APIView):
     """
     object_class: ClassVar[type] = None
     object_pk_name: ClassVar[str] = None
+    lookup_url_kwarg = 'client_pk'
 
     get_context = SerializerMixin.get_serializer_context
 
