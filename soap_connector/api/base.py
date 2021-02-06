@@ -1,6 +1,8 @@
 from typing import Type, List, ClassVar, Optional
 from contextlib import contextmanager
 
+from django.core.cache import cache
+
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -10,9 +12,10 @@ from rest_framework.reverse import reverse
 from rest_framework.serializers import Serializer
 
 from soap_connector.cache import Cache, Context
+from soap_connector.cache import Registry
 
 URL_NAMES = [
-    'settings', 'client', 'signature', 'username_token'
+    'settings', 'client', 'signature', 'username_token', 'registry'
 ]
 
 
@@ -29,6 +32,16 @@ def root(request):
         f'{name}': reverse(f'soap_connector:{name}_list', request=request)
         for name in URL_NAMES
     })
+
+
+@api_view()
+def registry(request):
+    """
+
+    :param request:
+    :return:
+    """
+    return Response({k: cache.get(k) for k in Registry.store})
 
 
 class SerializerMixin(object):

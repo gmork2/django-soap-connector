@@ -22,7 +22,7 @@ def make_key(context: Context, sufix: str) -> str:
     :return:
     """
     return ':'.join([
-        str(context['request'].user.id),
+        str(context['request'].user.id) or str(0),
         sufix
     ])
 
@@ -104,6 +104,8 @@ class Registry(object):
     """
     Manages a registry of cache versions for each context.
     """
+    store = list()
+
     def __init__(self, context: Context):
         """
         Initialize the registry using provided context.
@@ -170,6 +172,7 @@ class Registry(object):
             **{self.cls.__name__: versions}
         }
         cache.set(self.key, data, timeout=timeout)
+        self.store.append(self.key)
 
     def reset(self) -> None:
         """
@@ -179,6 +182,7 @@ class Registry(object):
         """
         data = {self.cls.__name__: []}
         cache.set(self.key, data)
+        self.store.append(self.key)
 
     def __str__(self):
         """
