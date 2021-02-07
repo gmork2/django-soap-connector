@@ -104,7 +104,7 @@ class Registry(object):
     """
     Manages a registry of cache versions for each context.
     """
-    store = list()
+    store = set()
 
     def __init__(self, context: Context):
         """
@@ -115,10 +115,8 @@ class Registry(object):
         self.key: str = make_key(context, 'versions')
         self.cls: type = context['view'].object_class
 
-        data = self.retrieve()
-
-        if not data:
-            self.reset()
+        if not self.store:
+            cache.set(self.key, {})
 
     def retrieve(self) -> Union[Dict[str, list], List[int]]:
         """
@@ -126,10 +124,10 @@ class Registry(object):
 
         :return:
         """
-        registry: dict = cache.get(self.key)
+        versions: dict = cache.get(self.key)
 
-        if registry:
-            return registry.get(self.cls.__name__, [])
+        if versions:
+            return versions.get(self.cls.__name__, [])
         return []
 
     def insert(self, version: int, timeout: float = None) -> None:
@@ -168,11 +166,14 @@ class Registry(object):
         :return:
         """
         data = {
-            **cache.get(self.key),
-            **{self.cls.__name__: versions}
+            x: y
+            for value in dict(**{k: cache.get(k) for k in self.store}).values()
+            for x, y in value.items()
         }
+        data.update(**{self.cls.__name__: versions})
         cache.set(self.key, data, timeout=timeout)
-        self.store.append(self.key)
+
+        self.store.add(self.key)
 
     def reset(self) -> None:
         """
@@ -182,7 +183,26 @@ class Registry(object):
         """
         data = {self.cls.__name__: []}
         cache.set(self.key, data)
-        self.store.append(self.key)
+        self.store.add(self.key)
+
+    @classmethod
+    def dump(cls) -> dict:
+        """
+
+        :return:
+        """
+        data = dict()
+        versions = {k: cache.get(k) for k in cls.store}
+
+        for key, value in versions.items():
+            user_id = key.split(':')[0]
+            data[key] = {}
+            for klass, pk_list in value.items():
+                data[key][klass] = {}
+                for pk in pk_list:
+                    content = cache.get(':'.join([user_id, klass]), version=pk)
+                    data[key][klass][pk] = content
+        return data
 
     def __str__(self):
         """

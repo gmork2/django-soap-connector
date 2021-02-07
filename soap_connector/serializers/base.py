@@ -26,7 +26,6 @@ class BaseSerializer(serializers.Serializer):
         :return:
         """
         view = self.context['view']
-
         pk = validated_data['pk']
         view.cache[pk] = validated_data
 

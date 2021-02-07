@@ -46,18 +46,7 @@ def registry(request):
     :param request:
     :return:
     """
-    response = dict()
-    versions = {k: cache.get(k) for k in Registry.store}
-
-    for key, value in versions.items():
-        user_id = key.split(':')[0]
-        response[key] = {}
-        for cls, pk_list in value.items():
-            response[key][cls] = {}
-            for pk in pk_list:
-                data = cache.get(':'.join([user_id, cls]), version=pk)
-                response[key][cls][pk] = data
-    return Response(response)
+    return Response(Registry.dump())
 
 
 class SerializerMixin(object):
@@ -167,7 +156,8 @@ class BaseAPIView(SerializerMixin, APIView):
         :param pk:
         :return:
         """
-        obj = self.cache[pk]
+        cpk = self.kwargs[self.lookup_url_kwarg]
+        obj = self.cache[pk or cpk]
         return obj
 
     def list(self, request: Request, *args, **kwargs) -> Response:
@@ -282,16 +272,16 @@ class ConnectorView(BaseAPIView):
         :param kwargs:
         :return:
         """
-        with self.with_context(Client):
-            try:
+        try:
+            with self.with_context(Client):
                 connector = Connector.from_view(self)
-            except (CacheError, ConnectorError):
-                return Response(status=status.HTTP_409_CONFLICT)
-            else:
-                data = getattr(connector, self.source_name, None)
-                if data:
-                    self.save(data)
-                    return Response(data, status=status.HTTP_200_OK)
+        except (CacheError, ConnectorError):
+            return Response(status=status.HTTP_409_CONFLICT)
+        else:
+            data = getattr(connector, self.source_name, None)
+            if data:
+                self.save(data)
+                return Response(data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def save_all(self, object_list, cls, lookup=None):
@@ -322,4 +312,4 @@ class ConnectorView(BaseAPIView):
         :param object_list:
         :return:
         """
-        self.save_all(object_list, Client)
+        self.save_all(object_list, self.object_class)
