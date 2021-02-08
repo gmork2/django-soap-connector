@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from zeep.client import Client
 from zeep.wsdl.definitions import Service, Port, Operation
-from zeep.wsdl.messages.soap import SoapMessage
+from zeep.wsdl.messages import soap
 
 from soap_connector.connector import Connector
 
@@ -23,7 +23,7 @@ def parser(parts: Optional[List[str]] = ()):
             yield qname, _type
 
 
-def signature(soap_message: SoapMessage):
+def signature(soap_message: soap.SoapMessage):
     """
 
     :param soap_message:
@@ -44,6 +44,8 @@ class ConnectorMixin(object):
     """
 
     """
+    context = None
+
     @property
     def connector(self):
         """
@@ -52,7 +54,7 @@ class ConnectorMixin(object):
         """
         view = self.context['view']
 
-        with view.context(Client):
+        with view.with_context(Client):
             return Connector.from_view(view)
 
     def get_name(self, cls, pk_name):
@@ -64,7 +66,7 @@ class ConnectorMixin(object):
         """
         view = self.context['view']
 
-        with view.context(cls):
+        with view.with_context(cls):
             pk = view.kwargs[pk_name]
             return view.get_object(pk)['name']
 
@@ -101,7 +103,9 @@ class ConnectorMixin(object):
 
 
 class OperationSerializer(serializers.Serializer, ConnectorMixin):
+    """
 
+    """
     def __init__(self, *args, **kwargs):
         """
 
