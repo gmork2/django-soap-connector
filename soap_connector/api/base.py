@@ -1,8 +1,6 @@
 from typing import Type, List, ClassVar, Optional
 from contextlib import contextmanager
 
-from django.core.cache import cache
-
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -55,6 +53,7 @@ class SerializerMixin(object):
     for validating and deserializing input, and for serializing
     output.
     """
+    request: Request = None
     serializer_class: ClassVar[Type[Serializer]] = None
 
     def get_serializer(self, *args, **kwargs):
