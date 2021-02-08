@@ -27,6 +27,18 @@ def make_key(context: Context, sufix: str) -> str:
     ])
 
 
+def obtain_ip(request):
+    """
+    Obtains ip client address.
+
+    :return:
+    """
+    return (
+        request.META.get('HTTP_X_FORWARDED_FOR') or
+        request.META.get('REMOTE_ADDR', '?')
+    ).split(',')[0]
+
+
 class SingletonDecorator:
     """
 
@@ -59,8 +71,7 @@ class CacheIterator(object):
     """
     pk_name = 'pk'
 
-    def __init__(self, object_list: ObjectList, cls: type,
-                 view: "BaseAPIView"):
+    def __init__(self, object_list: ObjectList, cls: type, view: "BaseAPIView"):
         """
         Initialize the iterator.
 
@@ -112,7 +123,8 @@ class Registry(object):
 
         :return:
         """
-        self.key: str = make_key(context, 'versions')
+        ip = obtain_ip(context['request'])
+        self.key: str = make_key(context, ip)
         self.cls: type = context['view'].object_class
 
         if not self.store:
