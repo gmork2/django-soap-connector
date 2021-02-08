@@ -217,9 +217,8 @@ class BaseAPIView(SerializerMixin, APIView):
         if pk is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        obj = self.get_object(pk)
-        if obj:
-            del obj
+        if pk:
+            del self.cache[pk]
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
