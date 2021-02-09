@@ -92,7 +92,6 @@ class SerializerMixin(object):
         }
 
 
-# TODO: Default allowed methods
 class BaseAPIView(SerializerMixin, APIView):
     """
     This class extends REST framework's APIView class, adding
@@ -192,9 +191,6 @@ class BaseAPIView(SerializerMixin, APIView):
         :param request:
         :return:
         """
-        if self.object_pk_name in kwargs:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
         context: Context = self.get_serializer_context()
         serializer: Serializer = self.serializer_class(
             data=request.data, context=context

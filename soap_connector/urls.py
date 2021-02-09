@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.decorators.http import require_http_methods
 
 from soap_connector import api
 
@@ -21,7 +22,7 @@ urlpatterns = [
     path('client/<int:client_pk>/element/', api.global_element, name='client_global_element_list'),
     path('client/<int:client_pk>/type/<slug:type_pk>/', api.global_type, name='client_global_type_detail'),
     path('client/<int:client_pk>/type/', api.global_type, name='client_global_type_list'),
-    path('client/<int:client_pk>/', api.client, name='client_detail'),
+    path('client/<int:client_pk>/', require_http_methods(["GET", "OPTIONS"])(api.client), name='client_detail'),
     path('client/', api.client, name='client_list'),
     path('signature/<int:signature_pk>/', api.signature, name='signature_detail'),
     path('signature/', api.signature, name='signature_list'),
