@@ -27,18 +27,6 @@ def make_key(context: Context, suffix: Optional[str] = None) -> str:
     return ':'.join([pk, suffix]) if suffix else pk
 
 
-def obtain_ip(request):
-    """
-    Obtains ip client address.
-
-    :return:
-    """
-    return (
-        request.META.get('HTTP_X_FORWARDED_FOR') or
-        request.META.get('REMOTE_ADDR', '?')
-    ).split(',')[0]
-
-
 class SingletonDecorator:
     """
 
