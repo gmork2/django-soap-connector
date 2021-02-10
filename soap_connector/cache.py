@@ -3,6 +3,8 @@ from typing import Dict, List, Union, Optional, Type
 
 from django.core.cache import cache
 
+from utils import dump_cache
+
 logger = logging.getLogger(__name__)
 
 ObjectList = List[Optional[dict]]
@@ -178,8 +180,7 @@ class Registry(object):
         :return:
         """
         data = {
-            x: y
-            for value in dict(**{k: cache.get(k) for k in self.store}).values()
+            x: y for value in dict(**{k: cache.get(k) for k in self.store}).values()
             for x, y in value.items()
         }
         data.update(**{self.cls.__name__: versions})
@@ -198,22 +199,14 @@ class Registry(object):
         self.store.add(self.key)
 
     @classmethod
-    def dump(cls) -> dict:
+    def dump(cls, depth=1) -> dict:
         """
 
         :return:
         """
-        data = dict()
-        versions = {k: cache.get(k) for k in cls.store}
-
-        for key, value in versions.items():
-            user_id = key.split(':')[0]
-            data[key] = {}
-            for klass, pk_list in value.items():
-                data[key][klass] = {}
-                for pk in pk_list:
-                    content = cache.get(':'.join([user_id, klass]), version=pk)
-                    data[key][klass][pk] = content
+        data = {k: cache.get(k) for k in cls.store}
+        if depth > 1:
+            data = dump_cache(depth, data.items())
         return data
 
     def __str__(self):

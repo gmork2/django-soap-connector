@@ -44,7 +44,7 @@ def registry(request):
     :param request:
     :return:
     """
-    return Response(Registry.dump())
+    return Response(Registry.dump(depth=2))
 
 
 class SerializerMixin(object):
