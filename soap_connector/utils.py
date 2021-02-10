@@ -1,3 +1,5 @@
+from typing import Type
+
 from django.core.cache import cache
 
 
@@ -24,3 +26,28 @@ def obtain_ip(request):
         request.META.get('HTTP_X_FORWARDED_FOR') or
         request.META.get('REMOTE_ADDR', '?')
     ).split(',')[0]
+
+
+class SingletonDecorator:
+    """
+
+    """
+    def __init__(self, cls: Type):
+        """
+
+        :param cls:
+        """
+        self.cls = cls
+        self.instance = None
+
+    def __call__(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwds:
+        :return:
+        """
+        if self.instance is None:
+            self.instance = self.cls(*args, **kwargs)
+
+        return self.instance
