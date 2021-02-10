@@ -1,6 +1,5 @@
 import logging
 import operator
-import math
 from typing import List
 
 from django.template.defaultfilters import slugify
@@ -11,26 +10,6 @@ from zeep.client import Client
 from zeep.wsdl.definitions import Service, Port
 
 logger = logging.getLogger(__name__)
-
-
-def to_number(s: str) -> int:
-    """
-    Transform 's' parameter into number and returns it.
-
-    :param s:
-    :return:
-    """
-    return int.from_bytes(s.encode(), 'little')
-
-
-def from_number(n: int) -> str:
-    """
-    Transform 'n' parameter into string and returns it.
-
-    :param n:
-    :return:
-    """
-    return n.to_bytes(math.ceil(n.bit_length() / 8), 'little').decode()
 
 
 class Connector(object):

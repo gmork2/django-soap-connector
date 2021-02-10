@@ -1,4 +1,5 @@
 from typing import Type
+import math
 
 from django.core.cache import cache
 
@@ -26,6 +27,26 @@ def obtain_ip(request):
         request.META.get('HTTP_X_FORWARDED_FOR') or
         request.META.get('REMOTE_ADDR', '?')
     ).split(',')[0]
+
+
+def to_number(s: str) -> int:
+    """
+    Transform 's' parameter into number and returns it.
+
+    :param s:
+    :return:
+    """
+    return int.from_bytes(s.encode(), 'little')
+
+
+def from_number(n: int) -> str:
+    """
+    Transform 'n' parameter into string and returns it.
+
+    :param n:
+    :return:
+    """
+    return n.to_bytes(math.ceil(n.bit_length() / 8), 'little').decode()
 
 
 class SingletonDecorator:
