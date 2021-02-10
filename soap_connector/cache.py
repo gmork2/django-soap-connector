@@ -123,8 +123,7 @@ class Registry(object):
 
         :return:
         """
-        ip = obtain_ip(context['request'])
-        self.key: str = make_key(context, ip)
+        self.key: str = make_key(context)
         self.cls: type = context['view'].object_class
 
         if not self.store:
