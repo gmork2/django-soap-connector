@@ -164,13 +164,6 @@ class BaseTestCase(TestCase):
         :return:
         """
 
-    @skip("See client.tests")
-    def test_put(self):
-        """
-
-        :return:
-        """
-
     def tearDown(self):
         """
 
