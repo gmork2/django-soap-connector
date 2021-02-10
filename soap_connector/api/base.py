@@ -174,27 +174,6 @@ class BaseAPIView(SerializerMixin, APIView):
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def put(self, request: Request, *args, **kwargs) -> Response:
-        """
-        Concrete view for updating an object.
-
-        :param request:
-        :return:
-        """
-        if self.object_pk_name not in kwargs or \
-                kwargs[self.object_pk_name] not in self.cache:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            context: Context = self.get_serializer_context()
-            serializer = self.serializer_class(
-                data=request.data, context=context
-            )
-            if serializer.is_valid():
-                data = serializer.update(None, serializer.data)
-                return Response(data, status=status.HTTP_200_OK)
-
-            return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
-
 
 class ConnectorView(BaseAPIView):
     """
