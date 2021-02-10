@@ -3,7 +3,7 @@ from typing import Dict, List, Union, Optional
 
 from django.core.cache import cache
 
-from utils import dump_cache
+from soap_connector.utils import dump_cache
 
 logger = logging.getLogger(__name__)
 
