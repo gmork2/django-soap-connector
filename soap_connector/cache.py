@@ -17,16 +17,14 @@ Context = Dict[
 ]
 
 
-def make_key(context: Context, sufix: str) -> str:
+def make_key(context: Context, suffix: Optional[str] = None) -> str:
     """
     A custom key function for processing to the final key.
 
     :return:
     """
-    return ':'.join([
-        str(context['request'].user.id or 0),
-        sufix
-    ])
+    pk = str(context['request'].user.id or 0)
+    return ':'.join([pk, suffix]) if suffix else pk
 
 
 def obtain_ip(request):
