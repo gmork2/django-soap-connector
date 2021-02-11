@@ -45,7 +45,11 @@ def registry(request):
     :param request:
     :return:
     """
-    return Response(Registry.dump(depth=2))
+    try:
+        depth = int(request.query_params.get('depth', 2))
+    except ValueError:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    return Response(Registry.dump(depth=int(depth)))
 
 
 class BaseAPIView(SerializerMixin, APIView):
@@ -59,8 +63,11 @@ class BaseAPIView(SerializerMixin, APIView):
 
     get_context = SerializerMixin.get_serializer_context
 
-    def set_context(self, object_class: type,
-                    serializer_class: Type[Serializer] = None) -> None:
+    def set_context(
+            self,
+            object_class: type,
+            serializer_class: Type[Serializer] = None
+    ) -> None:
         """
         Set a new context.
 
@@ -74,8 +81,11 @@ class BaseAPIView(SerializerMixin, APIView):
             self.serializer_class = serializer_class
 
     @contextmanager
-    def with_context(self, object_class: type,
-                     serializer_class: Type[Serializer] = None) -> None:
+    def with_context(
+            self,
+            object_class: type,
+            serializer_class: Type[Serializer] = None
+    ) -> None:
         """
         Context manager that allows the executing of code in a
         different context.
@@ -110,8 +120,8 @@ class BaseAPIView(SerializerMixin, APIView):
         :param pk:
         :return:
         """
-        cpk = self.kwargs[self.lookup_url_kwarg]
-        obj = self.cache[pk or cpk]
+        client_pk = self.kwargs[self.lookup_url_kwarg]
+        obj = self.cache[pk or client_pk]
         return obj
 
     def list(self, request: Request, *args, **kwargs) -> Response:
