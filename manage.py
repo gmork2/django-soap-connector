@@ -35,6 +35,11 @@ settings.configure(
             'APP_DIRS': True,
         },
     ],
+    MIGRATION_MODULES={
+        'auth': None,
+        'contenttypes': None,
+        'soap_connector': None
+    },
     REST_FRAMEWORK={
         'DEFAULT_PERMISSION_CLASSES': (
             'rest_framework.permissions.AllowAny',
