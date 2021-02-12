@@ -20,7 +20,7 @@ from soap_connector.api.mixins import SerializerMixin
 
 DEFAULT_DEPTH = 2
 URL_NAMES = [
-    'settings', 'client', 'signature', 'username_token', 'registry'
+    'settings_list', 'client_list', 'signature_list', 'username_token_list', 'registry_list'
 ]
 
 
@@ -34,7 +34,7 @@ def root(request):
     :return:
     """
     return Response({
-        f'{name}': reverse(f'soap_connector:{name}_list', request=request)
+        f'{name}': reverse(f'soap_connector:{name}', request=request)
         for name in URL_NAMES
     })
 
