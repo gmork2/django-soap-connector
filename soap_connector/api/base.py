@@ -18,6 +18,7 @@ from soap_connector.cache import CacheIterator
 from soap_connector.exceptions import ConnectorError, CacheError
 from soap_connector.api.mixins import SerializerMixin
 
+DEFAULT_DEPTH = 2
 URL_NAMES = [
     'settings', 'client', 'signature', 'username_token', 'registry'
 ]
@@ -46,7 +47,7 @@ def registry(request):
     :return:
     """
     try:
-        depth = int(request.query_params.get('depth', 2))
+        depth = int(request.query_params.get('depth', DEFAULT_DEPTH))
     except ValueError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     return Response(Registry.dump(depth=int(depth)))
