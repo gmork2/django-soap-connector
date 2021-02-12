@@ -139,14 +139,14 @@ class Registry(object):
         :param timeout:
         :return:
         """
+        self.store.add(self.key)
+
         data = {
             x: y for value in dict(**{k: cache.get(k) for k in self.store}).values()
             for x, y in value.items()
         }
         data.update(**{self.cls.__name__: versions})
         cache.set(self.key, data, timeout=timeout)
-
-        self.store.add(self.key)
 
     def reset(self) -> None:
         """
