@@ -78,7 +78,7 @@ class Registry(object):
     """
     Manages a registry of cache versions for each context.
     """
-    store = set()
+    sessions = set()
 
     def __init__(self, context: Context):
         """
@@ -89,7 +89,7 @@ class Registry(object):
         self.key: str = make_key(context)
         self.cls: type = context['view'].object_class
 
-        if not self.store:
+        if not self.sessions:
             cache.set(self.key, {})
 
     def retrieve(self) -> Union[Dict[str, list], List[int]]:
@@ -139,10 +139,10 @@ class Registry(object):
         :param timeout:
         :return:
         """
-        self.store.add(self.key)
+        self.sessions.add(self.key)
 
         data = {
-            x: y for value in dict(**{k: cache.get(k) for k in self.store}).values()
+            x: y for value in dict(**{k: cache.get(k) for k in self.sessions}).values()
             for x, y in value.items()
         }
         data.update(**{self.cls.__name__: versions})
@@ -156,7 +156,7 @@ class Registry(object):
         """
         data = {self.cls.__name__: []}
         cache.set(self.key, data)
-        self.store.add(self.key)
+        self.sessions.add(self.key)
 
     @classmethod
     def dump(cls, depth=1) -> dict:
@@ -164,7 +164,7 @@ class Registry(object):
 
         :return:
         """
-        data = {k: cache.get(k) for k in cls.store}
+        data = {k: cache.get(k) for k in cls.sessions}
         if depth > 1:
             data = dump_cache(depth, data.items())
         return data
