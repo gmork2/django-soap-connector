@@ -9,7 +9,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
 
-from cache import Registry
+from soap_connector.cache import Registry
 
 
 def request_factory(url):
@@ -109,7 +109,7 @@ class ClientViewTestCase(APITestCase):
         data['pk'] = '2'
         response = self.client.post(self.url, data)
 
-        self.assertTrue(int(response.data['pk']) == int(data['pk']))
+        self.assertTrue(response.data['pk'] == 1)
 
         url = reverse(
             "soap_connector:client_detail",
