@@ -29,14 +29,6 @@ class BaseTestCase(TestCase):
             'view': DummyView(request=request)
         }
 
-    def tearDown(self):
-        """
-        Delete all the keys in the cache.
-
-        :return:
-        """
-        cache.clear()
-
 
 class CacheIteratorTestCase(BaseTestCase):
     """
@@ -124,6 +116,7 @@ class RegistryTestCase(BaseTestCase):
         super().setUp()
 
         self.registry = Registry(context=self.context)
+        Registry.sessions = set()
 
     def test_simple(self):
         """
@@ -132,6 +125,7 @@ class RegistryTestCase(BaseTestCase):
         """
         object_class = self.context['view'].object_class
         key = self.registry.key
+        self.registry.insert(1)
 
         self.assertIn(object_class.__name__, cache.get(key))
 
@@ -140,10 +134,10 @@ class RegistryTestCase(BaseTestCase):
 
         :return:
         """
-        self.registry.insert(1)
-        self.assertIn(1, self.registry.retrieve())
         self.registry.insert(2)
-        self.assertEqual([1, 2], self.registry.retrieve())
+        self.assertIn(2, self.registry.retrieve())
+        self.registry.insert(3)
+        self.assertEqual([2, 3], self.registry.retrieve())
 
     @skip("Not implemented")
     def test_insert_duplicate(self):
@@ -164,21 +158,21 @@ class RegistryTestCase(BaseTestCase):
 
         :return:
         """
-        self.registry.insert(1)
-        self.registry.insert(2)
-        self.registry.remove(1)
-        self.assertEqual([2], self.registry.retrieve())
+        self.registry.insert(4)
+        self.registry.insert(5)
+        self.registry.remove(4)
+        self.assertEqual([5], self.registry.retrieve())
 
-        self.registry.insert(3)
-        self.registry.remove(3)
-        self.assertEqual([2], self.registry.retrieve())
+        self.registry.insert(6)
+        self.registry.remove(6)
+        self.assertEqual([5], self.registry.retrieve())
 
     def test_remove_empty_registry(self):
         """
 
         :return:
         """
-        self.registry.remove(1)
+        self.registry.remove(7)
         self.assertEqual([], self.registry.retrieve())
 
     def test_update(self):
@@ -186,7 +180,7 @@ class RegistryTestCase(BaseTestCase):
 
         :return:
         """
-        values = [1, 2, 3]
+        values = [8, 9, 10]
 
         self.registry.update(values)
         self.assertEqual(values, self.registry.retrieve())
@@ -206,13 +200,13 @@ class RegistryTestCase(BaseTestCase):
         }
         registry = Registry(context=context)
 
-        self.registry.insert(1)
-        registry.insert(2)
-        self.registry.insert(3)
-        registry.insert(4)
+        self.registry.insert(11)
+        registry.insert(12)
+        self.registry.insert(13)
+        registry.insert(14)
 
-        self.assertEqual([1, 3], self.registry.retrieve())
-        self.assertEqual([2, 4], registry.retrieve())
+        self.assertEqual([11, 13], self.registry.retrieve())
+        self.assertEqual([12, 14], registry.retrieve())
 
     def test_expiration(self):
         """
@@ -220,9 +214,9 @@ class RegistryTestCase(BaseTestCase):
 
         :return:
         """
-        self.registry.insert(1, 1)
-        self.assertIn(1, self.registry.retrieve())
-        time.sleep(2)
+        self.registry.insert(15, 15)
+        self.assertIn(15, self.registry.retrieve())
+        time.sleep(16)
         self.assertEqual([], self.registry.retrieve())
 
 
