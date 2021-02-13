@@ -46,3 +46,23 @@ class RootViewTestCase(TestCase):
         for url in self.response.data.values():
             link = ParseResult('', '', *urlparse(url)[2:]).geturl()
             self.assertIsInstance(resolve(link), ResolverMatch)
+
+
+class RegistryViewTestCase(TestCase):
+    """
+
+    """
+
+    def setUp(self):
+        """
+
+        :return:
+        """
+        self.url = reverse("soap_connector:registry_list")
+        self.response = self.client.get(self.url)
+
+    def test_registry_view(self):
+        """
+
+        """
+        pass
