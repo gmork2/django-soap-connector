@@ -7,7 +7,7 @@ from rest_framework.reverse import reverse
 from soap_connector.api.base import URL_NAMES
 
 
-class RootTestCase(TestCase):
+class RootViewTestCase(TestCase):
     """
 
     """
