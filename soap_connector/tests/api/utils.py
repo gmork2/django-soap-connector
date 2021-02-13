@@ -30,6 +30,7 @@ class DummyView(BaseAPIView):
     context.
     """
     serializer_class = DummySerializer
+    lookup_url_kwarg = 'pk'
 
     def __new__(cls, *args, **kwargs):
         """
