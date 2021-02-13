@@ -121,8 +121,8 @@ class BaseAPIView(SerializerMixin, APIView):
         :param pk:
         :return:
         """
-        client_pk = self.kwargs[self.lookup_url_kwarg]
-        obj = self.cache[pk or client_pk]
+        _pk = pk or self.kwargs[self.lookup_url_kwarg]
+        obj = self.cache[_pk]
         return obj
 
     def list(self, request: Request, *args, **kwargs) -> Response:
