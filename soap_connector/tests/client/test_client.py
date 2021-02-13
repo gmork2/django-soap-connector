@@ -181,9 +181,3 @@ class ClientViewTestCase(APITestCase):
         response = self.client.put(self.url, self.data)
         self.assertContains(response, '', status_code=400)
 
-    def tearDown(self):
-        """
-
-        :return:
-        """
-        cache.clear()
