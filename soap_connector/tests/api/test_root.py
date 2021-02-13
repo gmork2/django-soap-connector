@@ -36,14 +36,13 @@ class RootTestCase(TestCase):
             set(URL_NAMES)
         )
 
-    def test_endpoints(self):
+    def test_endpoint(self):
         """
         Endpoint url path must correspond to a view
-        function .
+        function.
 
         :return:
         """
         for url in self.response.data.values():
             link = ParseResult('', '', *urlparse(url)[2:]).geturl()
             self.assertIsInstance(resolve(link), ResolverMatch)
-
