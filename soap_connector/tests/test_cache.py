@@ -230,6 +230,7 @@ class CacheTestCase(BaseTestCase):
         :return:
         """
         super().setUp()
+        Registry.sessions = set()
 
         self.cache = Cache(context=self.context)
         self.data = {
@@ -266,22 +267,22 @@ class CacheTestCase(BaseTestCase):
 
         :return:
         """
-        self.assertIsNone(self.cache[1])
+        self.assertIsNone(self.cache[3])
 
     def test_delete(self):
         """
 
         :return:
         """
-        self.cache[1] = self.data
-        self.cache[2] = data = {
-            'id': 2,
-            'field': 'test_2'
+        self.cache[4] = self.data
+        self.cache[5] = {
+            'id': 5,
+            'field': 'test_5'
         }
-        del self.cache[1]
+        del self.cache[5]
 
-        self.assertIsNone(self.cache[1])
-        self.assertEqual(self.cache[2], data)
+        self.assertIsNone(self.cache[5])
+        self.assertEqual(self.cache[4], self.data)
 
     def test_delete_empty_cache(self):
         """
@@ -289,8 +290,8 @@ class CacheTestCase(BaseTestCase):
 
         :return:
         """
-        del self.cache[1]
-        self.assertIsNone(self.cache[1])
+        del self.cache[6]
+        self.assertIsNone(self.cache[6])
 
     def test_float_timeout(self):
         """
@@ -299,9 +300,9 @@ class CacheTestCase(BaseTestCase):
         :return:
         """
         self.cache.timeout = 999999.9
-        self.cache[1] = self.data
+        self.cache[7] = self.data
 
-        self.assertEqual(self.cache[1], self.data)
+        self.assertEqual(self.cache[7], self.data)
 
     def test_in(self):
         """
@@ -310,10 +311,10 @@ class CacheTestCase(BaseTestCase):
 
         :return:
         """
-        self.cache[1] = self.data
+        self.cache[8] = self.data
 
-        self.assertIn(1, self.cache)
-        self.assertNotIn(2, self.cache)
+        self.assertIn(8, self.cache)
+        self.assertNotIn(9, self.cache)
 
     @skip("Not implemented")
     def test_data_types(self):
@@ -330,11 +331,11 @@ class CacheTestCase(BaseTestCase):
         :return:
         """
         self.cache.timeout = 1
-        self.cache[1] = self.data
-        self.assertEqual(self.cache[1], self.data)
+        self.cache[10] = self.data
+        self.assertEqual(self.cache[10], self.data)
 
         time.sleep(2)
-        self.assertIsNone(self.cache[1], self.data)
+        self.assertIsNone(self.cache[10], self.data)
 
     def test_forever_timeout(self):
         """
@@ -344,15 +345,15 @@ class CacheTestCase(BaseTestCase):
         :return:
         """
         self.cache.timeout = 1
-        self.cache[1] = self.data
+        self.cache[11] = self.data
         self.cache.timeout = None
-        self.cache[2] = data2 = {
+        self.cache[12] = data2 = {
             'id': 2,
             'field': 'test_2'
         }
         time.sleep(2)
-        self.assertIsNone(self.cache[1], self.data)
-        self.assertEqual(self.cache[2], data2)
+        self.assertIsNone(self.cache[11], self.data)
+        self.assertEqual(self.cache[12], data2)
 
     def test_zero_timeout(self):
         """
@@ -360,9 +361,9 @@ class CacheTestCase(BaseTestCase):
         that is not cached.
         """
         self.cache.timeout = 0
-        self.cache[1] = self.data
+        self.cache[13] = self.data
 
-        self.assertIsNone(self.cache[1], self.data)
+        self.assertIsNone(self.cache[13], self.data)
 
     def test_non_existent(self):
         """
@@ -370,8 +371,8 @@ class CacheTestCase(BaseTestCase):
 
         :return:
         """
-        self.cache[1] = self.data
-        self.assertIsNone(self.cache[2])
+        self.cache[14] = self.data
+        self.assertIsNone(self.cache[15])
 
     def test_version(self):
         """
@@ -379,12 +380,12 @@ class CacheTestCase(BaseTestCase):
 
         :return:
         """
-        self.cache[1] = self.data
-        self.cache[2] = data2 = {
+        self.cache[16] = self.data
+        self.cache[17] = data2 = {
             'id': 2,
             'field': 'test_2'
         }
-        self.assertNotEqual(self.cache[1], data2)
+        self.assertNotEqual(self.cache[16], data2)
 
     def test_clear(self):
         """
@@ -392,15 +393,15 @@ class CacheTestCase(BaseTestCase):
 
         :return:
         """
-        self.cache[1] = self.data
-        self.cache[2] = {
+        self.cache[18] = self.data
+        self.cache[19] = {
             'id': 2,
             'field': 'test_2'
         }
         self.cache.clear()
 
-        self.assertIsNone(self.cache[1])
-        self.assertIsNone(self.cache[2])
+        self.assertIsNone(self.cache[18])
+        self.assertIsNone(self.cache[19])
 
     def test_unicode(self):
         """
@@ -413,5 +414,5 @@ class CacheTestCase(BaseTestCase):
             'unicode_ascii': 'Iñtërnâtiônàlizætiøn',
             'ascii2': {'x': 1}
         }
-        self.cache[1] = data
-        self.assertEqual(self.cache[1], data)
+        self.cache[20] = data
+        self.assertEqual(self.cache[20], data)
