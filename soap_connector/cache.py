@@ -176,7 +176,7 @@ class Registry(object):
 
         :return:
         """
-        return f'{self.key} -> {cache.get(self.key, None)}'
+        return f'{self.key} -> {self.dump()}'
 
 
 class Cache(object):
