@@ -3,12 +3,11 @@ from copy import copy
 
 from django.test import TestCase
 from django.contrib.auth.models import AnonymousUser
-from django.core.cache import cache
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 from rest_framework.test import APIRequestFactory
 
-from soap_connector.tests.api.utils import DummyView, BaseSerializer, set_name
+from soap_connector.tests.api.utils import DummyView, BaseSerializer, set_name, _counter
 
 
 class BaseTestCase(TestCase):
@@ -24,6 +23,7 @@ class BaseTestCase(TestCase):
 
         request = APIRequestFactory().get(url)
         request.user = AnonymousUser()
+        request.user.id = _counter
 
         self.view = DummyView(request=request)
         self.context = {
@@ -107,14 +107,14 @@ class BaseTestCase(TestCase):
         serializer_class = BaseSerializer
         view.set_context(object_class, serializer_class)
 
-        view.cache[1] = {'pk': 1}
+        view.cache[2] = {'pk': 2}
 
         with self.view.with_context(object_class, serializer_class):
             self.assertDictEqual(
-                view.cache[1], self.view.cache[1]
+                view.cache[2], self.view.cache[2]
             )
 
-        self.assertIsNone(self.view.cache[1])
+        self.assertIsNone(self.view.cache[2])
 
     def test_cache(self):
         """
@@ -123,18 +123,18 @@ class BaseTestCase(TestCase):
         """
         self.assertTrue(hasattr(self.view, 'cache'))
 
-        self.view.cache[1] = {'pk': 1}
-        self.assertEqual(self.view.cache[1], {'pk': 1})
+        self.view.cache[3] = {'pk': 3}
+        self.assertEqual(self.view.cache[3], {'pk': 3})
 
     def test_get_object(self):
         """
 
         :return:
         """
-        data = {'pk': 1}
-        self.view.cache[1] = data
+        data = {'pk': 4}
+        self.view.cache[4] = data
 
-        self.assertEqual(self.view.get_object(1), data)
+        self.assertEqual(self.view.get_object(4), data)
 
     @skip("See client.tests")
     def test_list(self):
@@ -164,9 +164,3 @@ class BaseTestCase(TestCase):
         :return:
         """
 
-    def tearDown(self):
-        """
-
-        :return:
-        """
-        cache.clear()
