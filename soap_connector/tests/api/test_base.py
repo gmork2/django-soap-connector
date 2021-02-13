@@ -10,7 +10,7 @@ from rest_framework.test import APIRequestFactory
 from soap_connector.tests.api.utils import DummyView, BaseSerializer, set_name, _counter
 
 
-class BaseTestCase(TestCase):
+class BaseAPIViewTestCase(TestCase):
     """
 
     """
@@ -163,4 +163,3 @@ class BaseTestCase(TestCase):
 
         :return:
         """
-
