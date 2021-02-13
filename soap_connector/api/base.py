@@ -176,10 +176,8 @@ class BaseAPIView(SerializerMixin, APIView):
         :return:
         """
         pk: int = kwargs.get(self.object_pk_name, None)
-        if pk is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        if pk:
+        if pk in self.cache:
             del self.cache[pk]
             return Response(status=status.HTTP_204_NO_CONTENT)
 
