@@ -115,8 +115,8 @@ class RegistryTestCase(BaseTestCase):
         """
         super().setUp()
 
-        self.registry = Registry(context=self.context)
         Registry.sessions = set()
+        self.registry = Registry(context=self.context)
 
     def test_simple(self):
         """
@@ -214,9 +214,9 @@ class RegistryTestCase(BaseTestCase):
 
         :return:
         """
-        self.registry.insert(15, 15)
+        self.registry.insert(15, 1)
         self.assertIn(15, self.registry.retrieve())
-        time.sleep(16)
+        time.sleep(2)
         self.assertEqual([], self.registry.retrieve())
 
 
