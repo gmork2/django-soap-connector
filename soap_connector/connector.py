@@ -17,7 +17,7 @@ class Connector(object):
     Inspects the WSDL document and provides an API's based
     on SOAP server interface.
     """
-    def __init__(self, client: dict, **kwargs):
+    def __init__(self, client_data: dict, **kwargs):
         """
         Initialize and cache the current SOAP client.
 
@@ -26,11 +26,11 @@ class Connector(object):
         from soap_connector.serializers import ClientSerializer
 
         fields = {
-            key: value for key, value in client.items()
-            if client and key in ClientSerializer.Meta.fields
+            key: value for key, value in client_data.items()
+            if client_data and key in ClientSerializer.Meta.fields
         }
         self.client = Client(**fields)
-        self.client_pk = client['pk']
+        self.client_pk = client_data['pk']
         self.context = kwargs['context']
 
     @classmethod
