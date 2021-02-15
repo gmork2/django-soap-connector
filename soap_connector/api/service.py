@@ -13,7 +13,7 @@ class ServiceView(ConnectorView):
     source_name: ClassVar[str] = 'services'
     object_pk_name: ClassVar[str] = 'service_pk'
 
-    def save(self, object_list):
+    def perform_create(self, object_list):
         """
         Saves service, ports and operations objects.
 
@@ -24,7 +24,7 @@ class ServiceView(ConnectorView):
             ('ports', Port),
             ('operations', Operation)
         ]
-        self.save_all(object_list, Service, lookup)
+        self.save(object_list, Service, lookup)
 
 
 service = ServiceView.as_view()

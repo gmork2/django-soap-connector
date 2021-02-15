@@ -218,11 +218,11 @@ class ConnectorView(BaseAPIView):
         else:
             data = getattr(connector, self.source_name, None)
             if data:
-                self.save(data)
+                self.perform_create(data)
                 return Response(data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def save_all(self, object_list, cls, lookup=None):
+    def save(self, object_list, cls, lookup=None):
         """
         Iterates on object_list and its recursively nested lists.
 
@@ -238,16 +238,16 @@ class ConnectorView(BaseAPIView):
                 item = next(iterator)
                 if lookup:
                     key, cls = lookup.pop(0)
-                    self.save_all(item[key], cls, lookup)
+                    self.save(item[key], cls, lookup)
 
             except StopIteration:
                 break
 
-    def save(self, object_list):
+    def perform_create(self, object_list):
         """
         Saves an object list.
 
         :param object_list:
         :return:
         """
-        self.save_all(object_list, self.object_class)
+        self.save(object_list, self.object_class)
