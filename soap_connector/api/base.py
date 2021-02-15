@@ -50,7 +50,7 @@ def registry(request):
         depth = int(request.query_params.get('depth', DEFAULT_DEPTH))
     except ValueError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    return Response(Registry.dump(depth=int(depth)))
+    return Response(Registry.dump(depth=depth))
 
 
 class BaseAPIView(SerializerMixin, APIView):
