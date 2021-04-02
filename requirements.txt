@@ -9,7 +9,7 @@ django-extensions==2.1.2
 djangorestframework==3.11.2
 idna==2.8
 isodate==0.6.0
-lxml==4.6.2
+lxml==4.6.3
 # pkg-resources==0.0.0
 pytz==2019.1
 requests==2.21.0
