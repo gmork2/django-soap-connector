@@ -12,7 +12,7 @@ isodate==0.6.0
 lxml==4.9.1
 platformdirs==2.5.1
 pytz==2019.1
-requests==2.21.0
+requests==2.31.0
 requests-file==1.5.1
 requests-toolbelt==0.9.1
 six==1.12.0
