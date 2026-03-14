@@ -6,7 +6,7 @@ chardet==3.0.4
 defusedxml==0.5.0
 Django==4.2.29
 django-extensions==2.1.2
-djangorestframework==3.15.2
+djangorestframework==3.11.2
 idna==3.7
 isodate==0.6.0
 lxml==4.9.1
