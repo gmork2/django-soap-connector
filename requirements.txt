@@ -18,4 +18,4 @@ requests-toolbelt==0.9.1
 six==1.12.0
 sqlparse==0.4.4
 urllib3==2.6.3
-zeep==4.1.0
+zeep==4.3.3
